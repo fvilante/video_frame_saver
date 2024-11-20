@@ -1,4 +1,25 @@
+# Apresentacao
+
+Programa para ler sinal de video de camera externa e salvar frames selecionados pelo usuario em um arquivo de texto.
+
+Neste documento é apresentado como compilar, executar e criar o binario para distribuicao.
+
+Todos os comandos elencados neste texto devem ser digitados no Powershell, que é a linha de comando do Windows.
+
 # Compilação, Execução e Distribuição.
+
+## Baixar o codigo-fonte
+
+Instale o [git para windows](https://git-scm.com/downloads/win). E confira se a instalacao foi bem sucedida digitando `git --version` na linha de comando.
+
+Mude para o diretorio que deseja salvar e execute o comando `git clone` assim:
+
+```powershell
+> cd meu_diretorio
+> git clone https://github.com/fvilante/video_frame_saver.git
+> cd video_frame_saver
+> dir 
+``` 
 
 
 ## 1) Instalar Compilador de linguagem Python na maquina
