@@ -82,3 +82,5 @@ dist/
 O arquivo `python_opencv.exe` pode ser distribuído através de pen-drive ou qualquer outro meio. Ele é executado sem necessidade de .DLLs ou outras dependências externas. 
 
 Vale apenas lembrar que se for compilado no Windows então será um executável que apenas rodará neste mesmo sistema operacional e não em outros.
+
+
