@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'  # Dispara o workflow quando um tag com formato v* for criado
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest  # Configura o runner para Windows
