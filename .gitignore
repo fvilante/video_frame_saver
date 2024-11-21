@@ -1,3 +1,8 @@
 # imagem gerada pelo aplicativo
-
 imagem_capturada.bmp
+
+
+# Arquivos de artefatos gerados pelo PyInstaler
+build/
+dist/
+python_opencv.spec
