@@ -1,10 +1,27 @@
-# Apresentacao
+# video_frame_recorder
 
-Programa para ler sinal de video de camera externa e salvar frames selecionados pelo usuario em um arquivo de texto.
+## Introdução
 
-Neste documento é apresentado como compilar, executar e criar o binario para distribuicao.
+Este programa serve para ler sinal de video de camera externa e salvar frames selecionados pelo usuario em um arquivo de texto.
 
-Todos os comandos elencados neste texto devem ser digitados no Powershell, que é a linha de comando do Windows.
+Voce pode baixar uma versao ja pre-compilada do executavel neste link: https://github.com/fvilante/video_frame_saver/releases
+
+Este documento ensina como compilar, executar e criar o binario para distribuicao.
+
+Todos os comandos elencados neste texto devem ser digitados na linha de comando do sistema operacional. (exemplo: Powershell no Windows).
+
+## Funcionamento esperado do programa
+
+Esta versao deve ser capaz de rodar em qualquer sistema operacional que suporte Python (ie: Windows, Linux, etc), e ler o sinal de video de uma camera externa conectada ao computador, normalmente a porta USB, e imediatamente mostrar a imagem capturada em uma janela na tela.
+
+Ao pressionar a tecla de espaço o programa irá salvar no mesmo diretorio do executavel um arquivo de nome `imagem_capturada.bmp` que contem o frame no momento em que a tecla espaco foi pressionada, e automaticamente o programa em seguida é encerrado.
+
+```
+Bugs conhecidos: 
+1) Se vc tentar fechar ò aplicativo clicando no "X" no canto superior da janela, o programa nao encerra, e sim apenas quando aperta a tecla espaco.
+```
+
+*IMPORTANTE*: Este programa nao depende de nenhuma biblioteca externa, e pode ser distribuido em um pendrive com apenas o arquivo executavel. Nao é necessario instalador.
 
 # Compilação, Execução e Distribuição.
 
@@ -34,7 +51,7 @@ Para assegurar que esta tudo ok com a instalação digite `python --version` na 
 
 NOTA: Pode ser necessário ajustar a variável de ambiente PATH para conter o diretório onde o python esta instalado.
 
-```
+```powershell
 > python --version
 Python 3.11.9
 ```
@@ -43,7 +60,7 @@ Python 3.11.9
 
 O python pode instalar automaticamente o opencv para ser acessado através da linguagem, basta digitar o comando:
 
-```
+```powershell
 > python -m pip install opencv-contrib-python
 ```
 
@@ -52,7 +69,7 @@ O python pode instalar automaticamente o opencv para ser acessado através da li
 
 Neste momento o script já pode ser executado de modo interpretado, bastando digitar:
 
-```
+```powershell
 > python python_opencv.py
 ```
 
@@ -60,19 +77,19 @@ Neste momento o script já pode ser executado de modo interpretado, bastando dig
 
 Para gerar o executável instale o programa `PyInstaler` digitando:
 
-```
+```powershell
 > python -m pip install pyinstaller
 ```
 
 Em seguida crie o executável digitando:
 
-```
+```powershell
 > pyinstaller --onefile python_opencv.py
 ```
 
 Ao final da execucacao do comando acima o executável estará localizado na sub-pasta `dist` que estará no mesmo diretório do seu script Python. Por exemplo:
 
-```
+```powershell
 dist/
     python_opencv.exe
 ```
@@ -84,3 +101,5 @@ O arquivo `python_opencv.exe` pode ser distribuído através de pen-drive ou qua
 Vale apenas lembrar que se for compilado no Windows então será um executável que apenas rodará neste mesmo sistema operacional e não em outros.
 
 
+---
+Vilante Labs 2024
