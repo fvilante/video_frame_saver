@@ -28,7 +28,7 @@ jobs:
 
       # Construir o executável
       - name: Build executable
-        run: python -m pyinstaller --onefile python_opencv.py
+        run: pyinstaller --onefile python_opencv.py
 
       # Fazer upload do executável para a release
       - name: Upload executable to GitHub Release
