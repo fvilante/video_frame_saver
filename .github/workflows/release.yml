@@ -1,0 +1,39 @@
+name: Build and Release Video Frame Recorder
+
+on:
+  push:
+    tags:
+      - 'v*'  # Dispara o workflow quando um tag com formato v* for criado
+
+jobs:
+  build:
+    runs-on: windows-latest  # Configura o runner para Windows
+
+    steps:
+      # Checkout do código
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Configurar Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11.9  # Versão especificada no README
+
+      # Instalar dependências
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install opencv-contrib-python pyinstaller
+
+      # Construir o executável
+      - name: Build executable
+        run: python -m pyinstaller --onefile python_opencv.py
+
+      # Fazer upload do executável para a release
+      - name: Upload executable to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/python_opencv.exe  # Caminho para o executável
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
