@@ -1,5 +1,5 @@
 [package]
-name = "rust_opencv"
+name = "video_frame_saver"
 version = "0.1.0"
 edition = "2021"
 
