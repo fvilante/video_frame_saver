@@ -3,22 +3,21 @@ use opencv::{core, highgui, imgcodecs, imgproc, prelude::*, videoio, Result};
 // site da camera = http://www.beleng.com.br/capa.asp?pi=produto&proid=853
 
 fn main() -> Result<()> {
-    let camera_index: i32 = 1; // 0 = webcam padrao do laptop ; 1 = camera adicional connectada a USB
+    let camera_index: i32 = 0; // 0 = webcam padrao do laptop ; 1 = camera adicional connectada a USB
     let mut cam = videoio::VideoCapture::new(camera_index, videoio::CAP_ANY)?;
     let w = cam.get(videoio::CAP_PROP_FRAME_WIDTH)?;
     let h = cam.get(videoio::CAP_PROP_FRAME_HEIGHT)?;
     println!("Stream da camera: W_{}xH_{}", w, h);
     //
-    let a = cam.set(videoio::CAP_PROP_FRAME_WIDTH, 4000.0)?;
-    let b = cam.set(videoio::CAP_PROP_FRAME_HEIGHT, 3000.0)?;
-    println!("Resultado da reconfiguracao: {}x{}", a, b);
+    cam.set(videoio::CAP_PROP_FRAME_WIDTH, 4000.0)?;
+    cam.set(videoio::CAP_PROP_FRAME_HEIGHT, 3000.0)?;
     //
     let w = cam.get(videoio::CAP_PROP_FRAME_WIDTH)?;
     let h = cam.get(videoio::CAP_PROP_FRAME_HEIGHT)?;
-    println!("Stream da camera: W_{}xH_{}", w, h);
+    println!("Stream da camera reconfigurado: W_{}xH_{}", w, h);
     highgui::named_window("window", highgui::WINDOW_FULLSCREEN)?;
     let mut frame = Mat::default();
-    let mut frameResized = Mat::default();
+    let mut frame_resized = Mat::default();
     loop {
         cam.read(&mut frame)?;
         if frame.size()?.width > 0 {
@@ -27,13 +26,13 @@ fn main() -> Result<()> {
             let value = 500;
             imgproc::resize(
                 &frame,
-                &mut frameResized,
+                &mut frame_resized,
                 core::Size::new(0, 0),
-                0.2,
-                0.2,
+                1.0,
+                1.0,
                 50,
             );
-            highgui::imshow("window", &mut frameResized)?;
+            highgui::imshow("window", &mut frame_resized)?;
         }
         let key = highgui::wait_key(10)?;
 
