@@ -1,3 +1,15 @@
+# ------------------------------
+# Projeto em linguagem Rust
+# ------------------------------
+
+target/
+
+
+# ------------------------------
+# Projeto Python
+# (migrado para Rust devido a desempenho)
+# ------------------------------
+
 # imagem gerada pelo aplicativo
 imagem_capturada.bmp
 
@@ -6,3 +18,4 @@ imagem_capturada.bmp
 build/
 dist/
 python_opencv.spec
+
