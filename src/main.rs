@@ -1,6 +1,7 @@
 use clap::Parser;
 use opencv::{core, highgui, imgcodecs, imgproc, prelude::*, videoio, Result};
 
+/// Configurações do programa obtidas via linha de comando
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Config {
@@ -19,12 +20,18 @@ struct Config {
     /// Nome do arquivo de saída (padrão: imagem_capturada.bmp)
     #[arg(short = 'f', long, default_value = "imagem_capturada.bmp")]
     image_name: String,
-}
 
-/// Representa as dimensões da câmera
-struct CameraSize {
-    width: f64,
-    height: f64,
+    /// Executa a listagem das câmeras acessíveis
+    #[arg(short = 'l', long)]
+    list: bool,
+
+    /// Range inicial para listagem de câmeras
+    #[arg(long, default_value_t = 0)]
+    range_start: i32,
+
+    /// Range final para listagem de câmeras
+    #[arg(long, default_value_t = 5)]
+    range_end: i32,
 }
 
 /// Inicializa a câmera com o índice especificado
@@ -146,8 +153,15 @@ fn process_key_input(key: i32, frame: &Mat, image_name: &str) -> Result<bool> {
 }
 
 fn main() -> Result<()> {
-    // Configurações via linha de comando
+    // Parse dos argumentos via linha de comando
     let config = Config::parse();
+
+    // Verifica se o modo de listagem foi solicitado
+    if config.list {
+        let range = config.range_start..config.range_end;
+        imprime_lista_de_cameras_acessiveis(range);
+        return Ok(());
+    }
 
     // Inicializa a câmera
     let mut camera = initialize_camera(config.camera_index)?;
@@ -160,7 +174,7 @@ fn main() -> Result<()> {
         camera_size.width, camera_size.height
     );
 
-    // Exibe o feed da câmera com os fatores de escala configurados
+    // Exibe o feed da câmera
     display_camera_feed(&mut camera, &config)?;
 
     Ok(())
