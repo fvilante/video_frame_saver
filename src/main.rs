@@ -1,36 +1,51 @@
 use clap::Parser;
 use opencv::{core, highgui, imgcodecs, imgproc, prelude::*, videoio, Result};
+use prettytable::{color, Attr, Cell, Row, Table};
 
 /// Configurações do programa obtidas via linha de comando
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
+#[command(
+    author = "Flavio Vilante <fvilante1@gmail.com>",
+    version = "1.4.0",
+    about = "video_frame_saver",
+    long_about = "
+
+video_frame_saver - Ferramenta para captura de vídeo em tempo real.
+
+FUNCIONALIDADES PRINCIPAIS:
+- Captura o vídeo da câmera especificada pelo usuário.
+- Exibe o vídeo em uma janela, com opção de redimensionamento da imagem.
+- Permite salvar um frame da imagem exibida pressionando a tecla ENTER.
+- Scaneia portas para identificar cameras acessiveis
+    "
+)]
 struct Config {
-    /// Índice da câmera a ser usada (padrão: 0)
+    /// Índice da câmera a ser usada
     #[arg(short = 'c', long, default_value_t = 0)]
     camera_index: i32,
 
-    /// Fator de escala horizontal (padrão: 1.0)
+    /// Fator de escala horizontal
     #[arg(short = 'x', long, default_value_t = 1.0)]
     scale_x: f64,
 
-    /// Fator de escala vertical (padrão: 1.0)
+    /// Fator de escala vertical
     #[arg(short = 'y', long, default_value_t = 1.0)]
     scale_y: f64,
 
-    /// Nome do arquivo de saída (padrão: imagem_capturada.bmp)
+    /// Nome do arquivo de saída
     #[arg(short = 'f', long, default_value = "imagem_capturada.bmp")]
     image_name: String,
 
-    /// Executa a listagem das câmeras acessíveis
+    /// Detecta e apresenta a listagem das câmeras acessíveis
     #[arg(short = 'l', long)]
     list: bool,
 
-    /// Range inicial para listagem de câmeras
+    /// Range inicial para buscar câmeras
     #[arg(long, default_value_t = 0)]
     range_start: i32,
 
-    /// Range final para listagem de câmeras
-    #[arg(long, default_value_t = 5)]
+    /// Range final para buscar câmeras
+    #[arg(long, default_value_t = 10)]
     range_end: i32,
 }
 
@@ -69,13 +84,40 @@ fn lista_cameras_acessiveis(range: impl Iterator<Item = i32>) -> Vec<i32> {
 
 fn imprime_lista_de_cameras_acessiveis(range: impl Iterator<Item = i32> + Clone) {
     let cameras_disponiveis = lista_cameras_acessiveis(range.clone());
-    println!(
-        "Câmeras acessíveis: {:?}\nCâmeras não acessíveis: {:?}",
-        cameras_disponiveis,
-        range
-            .filter(|index| !cameras_disponiveis.contains(index))
-            .collect::<Vec<_>>()
-    );
+    let cameras_nao_disponiveis: Vec<i32> = range
+        .filter(|index| !cameras_disponiveis.contains(index))
+        .collect();
+
+    let mut table = Table::new();
+
+    // Adiciona o cabeçalho
+    table.add_row(Row::new(vec![
+        Cell::new("Índice da Câmera")
+            .with_style(Attr::Bold)
+            .with_style(Attr::ForegroundColor(color::BRIGHT_WHITE)),
+        Cell::new("Status")
+            .with_style(Attr::Bold)
+            .with_style(Attr::ForegroundColor(color::BRIGHT_WHITE)),
+    ]));
+
+    // Adiciona câmeras disponíveis
+    for index in cameras_disponiveis {
+        table.add_row(Row::new(vec![
+            Cell::new(&index.to_string()).with_style(Attr::ForegroundColor(color::BRIGHT_GREEN)),
+            Cell::new("Disponível").with_style(Attr::ForegroundColor(color::BRIGHT_GREEN)),
+        ]));
+    }
+
+    // Adiciona câmeras não disponíveis
+    for index in cameras_nao_disponiveis {
+        table.add_row(Row::new(vec![
+            Cell::new(&index.to_string()).with_style(Attr::ForegroundColor(color::BRIGHT_RED)),
+            Cell::new("Não Disponível").with_style(Attr::ForegroundColor(color::BRIGHT_RED)),
+        ]));
+    }
+
+    // Exibe a tabela
+    table.printstd();
 }
 
 struct CameraSize {
