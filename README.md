@@ -16,10 +16,6 @@ Esta versao deve ser capaz de rodar em qualquer sistema operacional que suporte 
 
 Ao pressionar a tecla de espaço o programa irá salvar no mesmo diretorio do executavel um arquivo de nome `imagem_capturada.bmp` que contem o frame no momento em que a tecla espaco foi pressionada, e automaticamente o programa em seguida é encerrado.
 
-### Bugs conhecidos
-
-1) Se vc tentar fechar ò aplicativo clicando no "X" no canto superior da janela, o programa nao encerra, e sim apenas quando aperta a tecla espaco.
-
 ## Como compilar localmente
 
 ## Baixar o codigo-fonte
