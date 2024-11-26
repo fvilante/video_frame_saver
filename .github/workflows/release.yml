@@ -48,12 +48,18 @@ jobs:
         run: |
           copy "C:\\tools\\opencv\\build\\x64\\vc16\\bin\\opencv_world4100.dll" ".\\opencv_world4100.dll"
 
-      # Upload assets to GitHub Release
-      - name: Upload assets to GitHub Release
+      # Package files into a ZIP
+      - name: Package executable and DLL into a ZIP file
+        run: |
+          mkdir release_files
+          copy target/release/video_frame_saver.exe release_files/
+          copy opencv_world4100.dll release_files/
+          powershell Compress-Archive -Path release_files\* -DestinationPath video_frame_saver-v${{ github.ref_name }}-windows-x64.zip
+
+      # Upload ZIP to GitHub Release
+      - name: Upload ZIP to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            target/release/video_frame_saver.exe
-            opencv_world4100.dll
+          files: video_frame_saver-v${{ github.ref_name }}-windows-x64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
