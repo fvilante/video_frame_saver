@@ -53,7 +53,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            target/release/video_frame_recorder.exe
+            target/release/video_frame_saver.exe
             opencv_world4100.dll
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
