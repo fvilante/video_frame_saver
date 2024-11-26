@@ -3,36 +3,35 @@ name: Build and Release Video Frame Recorder
 on:
   push:
     tags:
-      - 'v*' # Dispara o workflow quando uma tag no formato v* for criada
+      - 'v*' # Trigger on version tags
 
 permissions:
   contents: write
 
 jobs:
   build:
-    runs-on: windows-latest  # Configura o runner para Windows
+    runs-on: windows-latest  # Use Windows environment
 
     steps:
-      # Checkout do código
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Instalar Chocolatey e dependências (LLVM e OpenCV)
+      # Install Chocolatey and dependencies (LLVM and OpenCV)
       - name: Install dependencies via Chocolatey
         run: |
           Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
           choco install llvm opencv --no-progress --confirm
-          echo "::add-path::C:\\tools\\opencv\\build\\x64\\vc16\\bin"
 
-      # Configurar variáveis de ambiente para o OpenCV
+      # Set OpenCV environment variables
       - name: Set OpenCV environment variables
         run: |
-          $env:OPENCV_INCLUDE_PATHS = "C:\\tools\\opencv\\build\\include"
-          $env:OPENCV_LINK_LIBS = "opencv_world4100"
-          $env:OPENCV_LINK_PATHS = "C:\\tools\\opencv\\build\\x64\\vc16\\lib"
-          $env:Path += ";C:\\tools\\opencv\\build\\x64\\vc16\\bin"
+          echo "OPENCV_INCLUDE_PATHS=C:\\tools\\opencv\\build\\include" >> $env:GITHUB_ENV
+          echo "OPENCV_LINK_LIBS=opencv_world4100" >> $env:GITHUB_ENV
+          echo "OPENCV_LINK_PATHS=C:\\tools\\opencv\\build\\x64\\vc16\\lib" >> $env:GITHUB_ENV
+          echo "C:\\tools\\opencv\\build\\x64\\vc16\\bin" >> $env:GITHUB_PATH
 
-      # Instalar a linguagem Rust
+      # Setup Rust
       - name: Setup Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -40,16 +39,16 @@ jobs:
           override: true
           toolchain: stable
 
-      # Compilar o projeto em Rust
+      # Build project
       - name: Build project
         run: cargo build --release
 
-      # Copiar a DLL necessária do OpenCV
+      # Copy OpenCV DLL
       - name: Copy OpenCV DLL
         run: |
           copy "C:\\tools\\opencv\\build\\x64\\vc16\\bin\\opencv_world4100.dll" ".\\opencv_world4100.dll"
 
-      # Fazer upload do executável e da DLL para a release
+      # Upload assets to GitHub Release
       - name: Upload assets to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
