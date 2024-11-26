@@ -6,7 +6,7 @@ use prettytable::{color, Attr, Cell, Row, Table};
 #[derive(Parser, Debug)]
 #[command(
     author = "Flavio Vilante <fvilante1@gmail.com>",
-    version = "1.4.0",
+    version = "1.4.4",
     about = "video_frame_saver",
     long_about = "
 
