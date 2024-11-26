@@ -2,21 +2,20 @@
 
 ## Introdução
 
-Este programa serve para ler sinal de video de camera externa e salvar frames selecionados pelo usuario em um arquivo de texto.
-
-Voce pode baixar uma versao ja pre-compilada do executavel neste link: https://github.com/fvilante/video_frame_saver/releases
-
-Este documento ensina como compilar, executar e criar o binario para distribuicao.
-
-Todos os comandos elencados neste texto devem ser digitados na linha de comando do sistema operacional. (exemplo: Powershell no Windows).
-
-## Funcionamento esperado do programa
-
-Esta versao deve ser capaz de rodar em qualquer sistema operacional que suporte Python (ie: Windows, Linux, etc), e ler o sinal de video de uma camera externa conectada ao computador, normalmente a porta USB, e imediatamente mostrar a imagem capturada em uma janela na tela.
+Esta programa é um programa de linha-de-comando, cujo papel é ler o sinal de video de uma camera externa conectada ao computador, e imediatamente mostrar a imagem capturada em uma janela na tela.
 
 Ao pressionar a tecla de espaço o programa irá salvar no mesmo diretorio do executavel um arquivo de nome `imagem_capturada.bmp` que contem o frame no momento em que a tecla espaco foi pressionada, e automaticamente o programa em seguida é encerrado.
 
+Pode ser compilado para rodar em qualquer sistema operacional que suporte linguagem Rust (ie: Windows, Linux, ARM).
+
+
 ## Como compilar localmente
+
+Todos os comandos elencados abaixo devem ser digitados na linha de comando do sistema operacional. (exemplo: Powershell no Windows).
+
+Este documento ensina como compilar, executar e criar o binario para distribuicao.
+
+Voce pode baixar uma versao ja pre-compilada do executavel neste link: https://github.com/fvilante/video_frame_saver/releases
 
 ## Baixar o codigo-fonte
 
