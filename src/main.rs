@@ -1,10 +1,25 @@
+use clap::Parser;
 use opencv::{core, highgui, imgcodecs, imgproc, prelude::*, videoio, Result};
 
-/// Configurações iniciais do programa
-const DEFAULT_CAMERA_INDEX: i32 = 0;
-const SCALE_X: f64 = 1.0; // Fator de escala horizontal
-const SCALE_Y: f64 = 1.0; // Fator de escala vertical
-const DEFAULT_IMAGE_NAME: &str = "imagem_capturada.bmp"; // Nome padrão para o arquivo salvo
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Config {
+    /// Índice da câmera a ser usada (padrão: 0)
+    #[arg(short = 'c', long, default_value_t = 0)]
+    camera_index: i32,
+
+    /// Fator de escala horizontal (padrão: 1.0)
+    #[arg(short = 'x', long, default_value_t = 1.0)]
+    scale_x: f64,
+
+    /// Fator de escala vertical (padrão: 1.0)
+    #[arg(short = 'y', long, default_value_t = 1.0)]
+    scale_y: f64,
+
+    /// Nome do arquivo de saída (padrão: imagem_capturada.bmp)
+    #[arg(short = 'f', long, default_value = "imagem_capturada.bmp")]
+    image_name: String,
+}
 
 /// Representa as dimensões da câmera
 struct CameraSize {
@@ -77,15 +92,8 @@ fn camera_get_size(camera: &videoio::VideoCapture) -> Result<CameraSize> {
     Ok(CameraSize { width, height })
 }
 
-/// Configura as dimensões da câmera
-fn camera_set_size(camera: &mut videoio::VideoCapture, camera_size: CameraSize) -> Result<()> {
-    camera.set(videoio::CAP_PROP_FRAME_WIDTH, camera_size.width)?;
-    camera.set(videoio::CAP_PROP_FRAME_HEIGHT, camera_size.height)?;
-    Ok(())
-}
-
 /// Exibe os frames capturados da câmera, redimensionados com os fatores especificados
-fn display_camera_feed(camera: &mut videoio::VideoCapture) -> Result<()> {
+fn display_camera_feed(camera: &mut videoio::VideoCapture, config: &Config) -> Result<()> {
     highgui::named_window("window", highgui::WINDOW_FULLSCREEN)?;
     let mut frame = Mat::default();
     let mut frame_resized = Mat::default();
@@ -101,8 +109,8 @@ fn display_camera_feed(camera: &mut videoio::VideoCapture) -> Result<()> {
                 &frame,
                 &mut frame_resized,
                 core::Size::new(0, 0),
-                SCALE_X,
-                SCALE_Y,
+                config.scale_x,
+                config.scale_y,
                 imgproc::INTER_LINEAR,
             );
             highgui::imshow("window", &mut frame_resized)?;
@@ -110,7 +118,7 @@ fn display_camera_feed(camera: &mut videoio::VideoCapture) -> Result<()> {
 
         let key = highgui::wait_key(10)?;
 
-        if process_key_input(key, &frame)? {
+        if process_key_input(key, &frame, &config.image_name)? {
             break;
         }
     }
@@ -119,7 +127,7 @@ fn display_camera_feed(camera: &mut videoio::VideoCapture) -> Result<()> {
 }
 
 /// Processa a entrada do teclado durante a exibição do feed da câmera
-fn process_key_input(key: i32, frame: &Mat) -> Result<bool> {
+fn process_key_input(key: i32, frame: &Mat, image_name: &str) -> Result<bool> {
     if key > 0 && key != 255 {
         if key == 27 {
             println!("Pressionado tecla ESC, nenhuma imagem será salva.");
@@ -128,8 +136,8 @@ fn process_key_input(key: i32, frame: &Mat) -> Result<bool> {
 
         println!("Iniciando rotina de gravação...");
         let params = core::Vector::new();
-        match imgcodecs::imwrite(DEFAULT_IMAGE_NAME, frame, &params) {
-            Ok(_) => println!("Gravação bem-sucedida!"),
+        match imgcodecs::imwrite(image_name, frame, &params) {
+            Ok(_) => println!("Gravação bem-sucedida! Arquivo salvo como: {}", image_name),
             Err(e) => eprintln!("Erro ao salvar imagem: {}", e),
         }
         return Ok(true);
@@ -138,8 +146,11 @@ fn process_key_input(key: i32, frame: &Mat) -> Result<bool> {
 }
 
 fn main() -> Result<()> {
+    // Configurações via linha de comando
+    let config = Config::parse();
+
     // Inicializa a câmera
-    let mut camera = initialize_camera(DEFAULT_CAMERA_INDEX)?;
+    let mut camera = initialize_camera(config.camera_index)?;
     println!("Câmera inicializada com sucesso!");
 
     // Obtém e exibe as dimensões da câmera
@@ -149,8 +160,8 @@ fn main() -> Result<()> {
         camera_size.width, camera_size.height
     );
 
-    // Exibe o feed da câmera
-    display_camera_feed(&mut camera)?;
+    // Exibe o feed da câmera com os fatores de escala configurados
+    display_camera_feed(&mut camera, &config)?;
 
     Ok(())
 }
