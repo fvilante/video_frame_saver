@@ -45,11 +45,18 @@ Para verificar que a instalação está correta digite:
 2.3.0
 ```
 
-### 2) Instalee `OpenCV` and `LLVM`, digitando o comando: 
+### 2) Instale `OpenCV` and `LLVM`, digitando o comando: 
 
+Para instalar o [LLVM](https://llvm.org/):
 
 ```powershell
-> choco install llvm opencv
+> choco install llvm --version=19.1.3
+```
+
+Para instalar o [OpenCV](https://opencv.org/):
+
+```powershell
+> choco install opencv --version=4.10.0 
 ```
 
 Voce pode verificar a instalacao do llvm digitando:
@@ -60,6 +67,12 @@ clang version 19.1.3
 Target: x86_64-pc-windows-msvc
 Thread model: posix
 InstalledDir: C:\Program Files\LLVM\bin
+```
+
+E verificar a instalacao do OpenCV digitando:
+
+```powershell
+choco list opencv
 ```
 
 Para verificar o OpenCV vale notar que o diretorio padrao onde a livraria OpenCV é instalada é em `c:\tools`.
@@ -77,7 +90,7 @@ Digite:
 > $env:Path += ";C:\tools\opencv\build\x64\vc16\bin" # o endereco do arquivo $env:OPENCV_LINK_LIBS
 ```
 
-NOTA: Da forma acima, as variaveis de ambiente apenas serão validas durante a sessao atual do Powershell, e serão perdidas quando a sessao atual for fechada. Existe uma forma de fazer estas variaveis nao volateis, que nao será tratado aqui.
+NOTA: Da forma acima, as variaveis de ambiente apenas serão validas APENAS durante a sessao atual do Powershell, e serão perdidas quando a sessao atual for fechada. Existe uma forma de fazer estas variaveis nao volateis, que nao será tratado aqui.
 
 ### 4) Instale a linguagem de programacao [Rust](https://www.rust-lang.org/tools/install).
 
