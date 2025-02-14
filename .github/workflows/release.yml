@@ -29,7 +29,6 @@ jobs:
 
       - name: Reinstalar OpenCV versão específica
         run: |
-            choco uninstall opencv -y
             choco install opencv --version=4.10.0 --confirm --no-progress
 
       # Set OpenCV environment variables
