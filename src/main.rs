@@ -6,7 +6,7 @@ use prettytable::{color, Attr, Cell, Row, Table};
 #[derive(Parser, Debug)]
 #[command(
     author = "Flavio Vilante <fvilante1@gmail.com>",
-    version = "1.4.4",
+    version = "1.4.6",
     about = "video_frame_saver",
     long_about = "
 
@@ -47,6 +47,22 @@ struct Config {
     /// Range final para buscar câmeras
     #[arg(long, default_value_t = 10)]
     range_end: i32,
+
+    /// Largura desejada da câmera (opcional). Utilize em conjunto com o parametro 'height'
+    #[arg(long)]
+    width: Option<i32>,
+
+    /// Altura desejada da câmera (opcional). Utilize em conjunto com o parametro 'width'
+    #[arg(long)]
+    height: Option<i32>,
+
+    /// Ativa modo verbose para depuração (ativa todas as opções de saída detalhada)
+    #[arg(long)]
+    verbose: bool,
+
+    /// Detecta e lista as opcoes de resolucao da camera.
+    #[arg(long)]
+    detect_resolutions: bool,
 }
 
 /// Inicializa a câmera com o índice especificado
@@ -125,6 +141,18 @@ struct CameraSize {
     height: f64,
 }
 
+fn camera_set_size(camera: &mut videoio::VideoCapture, config: &Config) {
+    if let (Some(w), Some(h)) = (config.width, config.height) {
+        if config.verbose {
+            println!("Definindo resolução da câmera para {}x{}", w, h);
+        }
+        camera.set(videoio::CAP_PROP_FRAME_WIDTH, w as f64);
+        camera.set(videoio::CAP_PROP_FRAME_HEIGHT, h as f64);
+    } else if config.verbose {
+        println!("Usando resolução padrão da câmera.");
+    }
+}
+
 fn camera_get_size(camera: &videoio::VideoCapture) -> Result<CameraSize> {
     let width = camera
         .get(videoio::CAP_PROP_FRAME_WIDTH)
@@ -194,6 +222,61 @@ fn process_key_input(key: i32, frame: &Mat, image_name: &str) -> Result<bool> {
     Ok(false)
 }
 
+fn listar_resolucoes_suportadas(camera: &mut videoio::VideoCapture) -> Vec<(i32, i32)> {
+    let resolucoes_comuns = vec![
+        (160, 120),
+        (320, 240),
+        (640, 480),
+        (800, 600),
+        (1024, 768),
+        (1280, 720),
+        (1280, 800),
+        (1280, 1024),
+        (1366, 768),
+        (1440, 900),
+        (1600, 900),
+        (1680, 1050),
+        (1920, 1080),
+        (1920, 1200),
+        (2560, 1440),
+        (2560, 1600),
+        (3840, 2160),
+        (4096, 2160),
+        (5120, 2880),
+        (7680, 4320),
+        (3264, 2448),
+        (2592, 1944),
+        (2048, 1536),
+        (960, 540),
+        (720, 576),
+        (854, 480),
+        (1152, 864),
+        (1360, 768),
+        (3000, 4000),
+        (4000, 3000),
+    ];
+
+    let mut resolucoes_suportadas = Vec::new();
+
+    for (w, h) in resolucoes_comuns.iter() {
+        camera
+            .set(videoio::CAP_PROP_FRAME_WIDTH, *w as f64)
+            .unwrap();
+        camera
+            .set(videoio::CAP_PROP_FRAME_HEIGHT, *h as f64)
+            .unwrap();
+
+        let width = camera.get(videoio::CAP_PROP_FRAME_WIDTH).unwrap() as i32;
+        let height = camera.get(videoio::CAP_PROP_FRAME_HEIGHT).unwrap() as i32;
+
+        if width == *w && height == *h {
+            resolucoes_suportadas.push((*w, *h));
+        }
+    }
+
+    resolucoes_suportadas
+}
+
 fn main() -> Result<()> {
     // Parse dos argumentos via linha de comando
     let config = Config::parse();
@@ -209,15 +292,27 @@ fn main() -> Result<()> {
     let mut camera = initialize_camera(config.camera_index)?;
     println!("Câmera inicializada com sucesso!");
 
-    // Obtém e exibe as dimensões da câmera
-    let camera_size = camera_get_size(&camera)?;
-    println!(
-        "Dimensões atuais da câmera: Largura = {}, Altura = {}",
-        camera_size.width, camera_size.height
-    );
+    if config.detect_resolutions {
+        let resolucoes = listar_resolucoes_suportadas(&mut camera);
+        println!("Resoluções suportadas pela câmera:");
+        for (w, h) in resolucoes {
+            println!("{}x{}", w, h);
+        }
+        return Ok(());
+    } else {
+        // Seta dimensoes da camera
+        camera_set_size(&mut camera, &config);
 
-    // Exibe o feed da câmera
-    display_camera_feed(&mut camera, &config)?;
+        // Obtém e exibe as dimensões da câmera
+        let camera_size = camera_get_size(&camera)?;
+        println!(
+            "Dimensões atuais da câmera: Largura = {}, Altura = {}",
+            camera_size.width, camera_size.height
+        );
 
-    Ok(())
+        // Exibe o feed da câmera
+        display_camera_feed(&mut camera, &config)?;
+
+        Ok(())
+    }
 }
