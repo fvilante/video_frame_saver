@@ -73,6 +73,7 @@ enum AppError {
     WriteImageError(String),
     CameraSizeError(String),
     CameraGuiWindowOpenError(String),
+    ImageResizeError(String),
 }
 
 impl std::fmt::Display for AppError {
@@ -88,6 +89,9 @@ impl std::fmt::Display for AppError {
                 "Erro ao abrir janela grafica para apresentar imagem da camera: {}",
                 msg
             ),
+            AppError::ImageResizeError(msg) => {
+                write!(f, "Erro ao redimensionar (escalar) imagem: {}", msg)
+            }
         }
     }
 }
@@ -104,13 +108,14 @@ impl AppError {
             AppError::CameraSizeError(_) => 63,
             AppError::CameraGuiWindowOpenError(_) => 64,
             AppError::CameraCloseError(_) => 65,
+            AppError::ImageResizeError(_) => 66,
         }
     }
 }
 
 /// Inicializa a câmera com o índice especificado
 fn initialize_camera(camera_index: i32) -> Result<videoio::VideoCapture, AppError> {
-    let mut camera = videoio::VideoCapture::new(camera_index, videoio::CAP_ANY)
+    let camera = videoio::VideoCapture::new(camera_index, videoio::CAP_ANY)
         .map_err(|e| AppError::CameraOpenError(e.to_string()))?;
     if !camera
         .is_opened()
@@ -187,16 +192,33 @@ struct CameraSize {
     height: f64,
 }
 
-fn camera_set_size(camera: &mut videoio::VideoCapture, config: &Config) {
+fn camera_set_size(camera: &mut videoio::VideoCapture, config: &Config) -> Result<(), AppError> {
     if let (Some(w), Some(h)) = (config.width, config.height) {
         if config.verbose {
             println!("Definindo resolução da câmera para {}x{}", w, h);
         }
-        camera.set(videoio::CAP_PROP_FRAME_WIDTH, w as f64);
-        camera.set(videoio::CAP_PROP_FRAME_HEIGHT, h as f64);
+        camera
+            .set(videoio::CAP_PROP_FRAME_WIDTH, w as f64)
+            .map_err(|e| {
+                AppError::CameraSizeError(format!(
+                    "Erro ao setar largura de resolucao da camera: {}",
+                    e
+                ))
+            })?;
+        camera
+            .set(videoio::CAP_PROP_FRAME_HEIGHT, h as f64)
+            .map_err(|e| {
+                AppError::CameraSizeError(format!(
+                    "Erro ao setar altura de resolucao da camera: {}",
+                    e
+                ))
+            })?;
+        return Ok(());
     } else if config.verbose {
         println!("Usando resolução padrão da câmera.");
+        return Ok(());
     }
+    Ok(())
 }
 
 fn camera_get_size(camera: &videoio::VideoCapture) -> Result<CameraSize, AppError> {
@@ -251,7 +273,10 @@ fn display_camera_feed(
                 config.scale_x,
                 config.scale_y,
                 imgproc::INTER_LINEAR,
-            );
+            )
+            .map_err(|e| {
+                AppError::ImageResizeError(format!("Erro redimensionar (escalar) imagem: {}", e))
+            })?;
             highgui::imshow("window", &mut frame_resized).map_err(|e| {
                 AppError::CameraGuiWindowOpenError(format!(
                     "Erro ao mostrar janela grafica para apresentar imagem da camera: {}",
@@ -397,7 +422,7 @@ fn run_app() -> Result<(), AppError> {
         return Ok(());
     } else {
         // Seta dimensoes da camera
-        camera_set_size(&mut camera, &config);
+        camera_set_size(&mut camera, &config)?;
 
         // Obtém e exibe as dimensões da câmera
         let camera_size = camera_get_size(&camera)?;
