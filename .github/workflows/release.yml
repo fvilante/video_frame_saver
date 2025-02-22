@@ -61,9 +61,9 @@ jobs:
       - name: Criar pasta release_files
         run: mkdir release_files
 
-      # Copiar README.txt para a pasta release_files
+      # Copiar GUIA_DE_USO.txt para a pasta release_files
       - name: Adicionar README.txt ao release
-        run: copy resources/README.txt release_files/
+        run: copy resources/GUIA_DE_USO.txt release_files/
 
       # Package files into a ZIP
       - name: Package executable and DLL into a ZIP file

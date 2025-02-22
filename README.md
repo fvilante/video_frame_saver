@@ -139,7 +139,7 @@ Os bugs conhecidos podem ser visualizados [aqui](https://github.com/fvilante/vid
 ## Outras informações
 As documentações abaixos sao distribuidas junto com os arquivos binarios:
 - [Documentacao dos codigos de erros](https://raw.githubusercontent.com/fvilante/video_frame_saver/refs/heads/main/resources/CODIGOS_DE_ERRO.txt)
-- [Guia do Usuario](https://github.com/fvilante/video_frame_saver/blob/main/resources/README.txt)
+- [Guia de uso](https://raw.githubusercontent.com/fvilante/video_frame_saver/refs/heads/main/resources/GUIA_DE_USO.txt)
 
 ## Como compilar localmente
 
