@@ -136,6 +136,10 @@ Se o programa não iniciar corretamente, verifique se a **.dll** necessária est
 ## Relatório de Bugs
 Os bugs conhecidos podem ser visualizados [aqui](https://github.com/fvilante/video_frame_saver/issues) 
 
+## Outras informações
+As documentações abaixos sao distribuidas junto com os arquivos binarios:
+- [Documentacao dos codigos de erros](https://raw.githubusercontent.com/fvilante/video_frame_saver/refs/heads/main/resources/CODIGOS_DE_ERRO.txt)
+- [Guia do Usuario](https://github.com/fvilante/video_frame_saver/blob/main/resources/README.txt)
 
 ## Como compilar localmente
 
