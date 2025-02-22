@@ -1,0 +1,111 @@
+============================================================
+                VIDEO FRAME SAVER - CODIGOS DE ERRO
+============================================================
+
+SOBRE ESTE DOCUMENTO:
+----------------------
+Este documento explica os codigos de erro gerados pelo programa 
+"video_frame_saver", seus significados e como resolver os problemas.
+
+Os codigos de erro sao retornados ao sistema operacional quando 
+o programa encontra um problema critico.
+
+============================================================
+  LISTA DE CODIGOS DE ERRO E SEUS SIGNIFICADOS
+============================================================
+
+CODIGO  | TIPO DE ERRO                     | DESCRICAO
+--------|-----------------------------------|-------------------------------------
+  60    | Erro ao abrir a camera           | A camera nao pode ser inicializada.
+        |                                   | Pode ser porque ela esta em uso ou
+        |                                   | o indice esta incorreto.
+
+  61    | Erro ao capturar frame           | Ocorreu um problema ao tentar ler
+        |                                   | um frame da camera. Isso pode ser 
+        |                                   | causado por falta de permissao ou
+        |                                   | desconexao da camera.
+
+  62    | Erro ao salvar imagem            | Ocorreu um erro ao gravar a imagem
+        |                                   | no disco. Pode ser falta de espaco
+        |                                   | ou permissao negada.
+
+  63    | Erro de resolucao da camera      | A camera nao suporta a resolucao
+        |                                   | especificada ou houve um problema
+        |                                   | ao tentar definir a resolucao.
+
+  64    | Erro ao abrir janela grafica     | Ocorreu um problema ao criar a 
+        |                                   | janela de visualizacao do feed 
+        |                                   | da camera. Pode ser problema de 
+        |                                   | ambiente grafico ou drivers.
+
+  65    | Erro ao fechar a camera          | A camera nao pode ser liberada 
+        |                                   | corretamente. Pode indicar um 
+        |                                   | problema no hardware ou driver.
+
+  66    | Erro ao redimensionar imagem     | O programa encontrou um erro ao
+        |                                   | tentar ajustar o tamanho da 
+        |                                   | imagem antes da exibicao. Isso
+        |                                   | pode ser devido a parametros 
+        |                                   | invalidos de escala.
+
+============================================================
+  SOLUCAO DE PROBLEMAS COMUNS
+============================================================
+
+1) A CAMERA NAO ABRE OU O PROGRAMA RETORNA ERRO 60
+---------------------------------------------------
+   - Verifique se a camera esta conectada corretamente.
+   - Tente usar outro indice de camera: 
+       video_frame_saver.exe --camera-index 1
+   - Certifique-se de que outro programa nao esta usando a camera.
+
+
+2) ERRO 62 AO SALVAR A IMAGEM
+-----------------------------
+   - Verifique se ha espaco suficiente no disco.
+   - Certifique-se de que o diretorio de destino permite gravacao.
+   - Tente salvar em outro local:
+       video_frame_saver.exe --file "C:\Users\Public\imagem.bmp"
+
+3) O PROGRAMA TRAVA AO TENTAR REDIMENSIONAR A IMAGEM (ERRO 66)
+--------------------------------------------------------------
+   - O parametro de escala pode estar invalido. Teste o seguinte:
+       video_frame_saver.exe --scale_x 1.0 --scale_y 1.0
+
+============================================================
+  COMO DEBUGAR ERROS MAIS DETALHADOS
+============================================================
+
+Se voce encontrar um erro desconhecido, execute o programa com o 
+modo **verbose** ativado para mais informacoes:
+
+   video_frame_saver.exe --verbose
+
+Isso imprimira mensagens detalhadas no console.
+
+============================================================
+  RELATAR ERROS OU SOLICITAR SUPORTE
+============================================================
+
+Se nenhum dos passos acima resolver seu problema, voce pode relatar
+o erro na pagina oficial do projeto no GitHub:
+
+Repositório oficial:
+   https://github.com/fvilante/video_frame_saver
+
+Pagina de issues (relatar problemas):
+   https://github.com/fvilante/video_frame_saver/issues
+
+============================================================
+  NOTAS FINAIS
+============================================================
+
+Este programa foi desenvolvido para ser utilizado via linha de
+comando. Se voce deseja aprender mais sobre suas funcionalidades,
+execute:
+
+   video_frame_saver.exe --help
+
+Ultima atualizacao: 22/02/2025
+
+Desenvolvido por Flavio Vilante.
