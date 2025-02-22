@@ -56,10 +56,17 @@ jobs:
         run: |
           copy "C:\\tools\\opencv\\build\\x64\\vc16\\bin\\opencv_world4100.dll" ".\\opencv_world4100.dll"
 
+      # Criar a pasta release_files antes de copiar arquivos
+      - name: Criar pasta release_files
+        run: mkdir release_files
+
+      # Copiar README.txt para a pasta release_files
+      - name: Adicionar README.txt ao release
+        run: copy resources/README.txt release_files/
+
       # Package files into a ZIP
       - name: Package executable and DLL into a ZIP file
         run: |
-          mkdir release_files
           copy target/release/video_frame_saver.exe release_files/
           copy opencv_world4100.dll release_files/
           powershell Compress-Archive -Path release_files\* -DestinationPath video_frame_saver-${{ github.ref_name }}-windows-x64.zip

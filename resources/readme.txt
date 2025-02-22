@@ -1,0 +1,97 @@
+===========================================
+ VIDEO FRAME SAVER - GUIA DE USO
+===========================================
+
+SOBRE:
+Este e um utilitario de linha de comando para captura de frames de video em tempo real.
+
+O pacote contem os seguintes arquivos:
+
+- video_frame_saver.exe  -> O executavel principal.
+- opencv_world4100.dll    -> Biblioteca necessaria para o funcionamento do programa.
+
+===========================================
+ INSTRUCOES DE USO
+===========================================
+
+1. Extraia todos os arquivos do ZIP para uma mesma pasta.
+2. Nao remova ou mova o arquivo "opencv_world4100.dll" para outro local.
+   - O executavel precisa encontrar esta DLL no mesmo diretorio onde ele esta sendo executado.
+3. Execute "video_frame_saver.exe" pelo terminal (CMD ou PowerShell).
+
+===========================================
+ COMO VERIFICAR A VERSAO DO PROGRAMA
+===========================================
+
+Para saber a versao instalada, digite o seguinte comando:
+
+   video_frame_saver.exe --version
+
+===========================================
+ COMO OBTER AJUDA PELO TERMINAL
+===========================================
+
+Para ver a lista de opcoes disponiveis e como usar o programa, digite:
+
+   video_frame_saver.exe --help
+
+===========================================
+ EXECUCAO NO CMD (Prompt de Comando)
+===========================================
+
+1. Abra a pasta onde os arquivos foram extraidos.
+2. No Explorador de Arquivos, clique na barra de endereco, digite "cmd" e pressione ENTER.
+3. Digite o seguinte comando para executar o programa:
+
+   video_frame_saver.exe
+
+===========================================
+ EXECUCAO NO POWERSHELL
+===========================================
+
+1. Abra a pasta onde os arquivos foram extraidos.
+2. No Explorador de Arquivos, clique na barra de endereco, digite "powershell" e pressione ENTER.
+3. Digite o seguinte comando para executar o programa:
+
+   .\video_frame_saver.exe
+
+===========================================
+ SOLUCAO DE PROBLEMAS
+===========================================
+
+PROBLEMA: O programa nao abre ou exibe erro de DLL ausente
+CAUSA: O arquivo "opencv_world4100.dll" nao esta no mesmo diretorio do executavel.
+SOLUCAO: Certifique-se de que "video_frame_saver.exe" e "opencv_world4100.dll"
+         estao na mesma pasta.
+
+PROBLEMA: O programa abre e fecha rapidamente
+CAUSA: Provavelmente foi executado com um duplo clique no Explorador de Arquivos.
+SOLUCAO: Abra um CMD ou PowerShell e execute o comando manualmente.
+
+===========================================
+ DOCUMENTACAO COMPLETA E ATUALIZADA
+===========================================
+
+Para mais informacoes detalhadas sobre o programa, consulte o README.md no GitHub:
+
+   https://github.com/fvilante/video_frame_saver#readme
+
+Para baixar outras versoes do programa ou ver os ultimos releases, acesse:
+
+   https://github.com/fvilante/video_frame_saver/releases
+
+Para ver lista de bugs em aberto, ou solicitar correcao de bug acesse:
+
+    https://github.com/fvilante/video_frame_saver/issues
+
+Para visualizar codigo fonte acesse:
+
+    https://github.com/fvilante/video_frame_saver
+
+===========================================
+ LICENCA
+===========================================
+
+Este software e distribuido sob os termos da licenca MIT.
+
+Desenvolvido por Vilante Labs (C) 2025 
