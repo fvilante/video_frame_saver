@@ -65,35 +65,81 @@ struct Config {
     detect_resolutions: bool,
 }
 
-/// Inicializa a câmera com o índice especificado
-fn initialize_camera(camera_index: i32) -> Result<videoio::VideoCapture> {
-    let mut camera = videoio::VideoCapture::new(camera_index, videoio::CAP_ANY)?;
-    if !camera.is_opened()? {
-        return Err(opencv::Error::new(
-            core::StsError,
-            format!(
-                "Não foi possível abrir a câmera com o índice: {}",
-                camera_index
+#[derive(Debug)]
+enum AppError {
+    CameraOpenError(String),
+    CameraCloseError(String),
+    FrameReadError(String),
+    WriteImageError(String),
+    CameraSizeError(String),
+    CameraGuiWindowOpenError(String),
+}
+
+impl std::fmt::Display for AppError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            AppError::CameraOpenError(msg) => write!(f, "Erro ao abrir a camera: {}", msg),
+            AppError::CameraCloseError(msg) => write!(f, "Erro ao fechar a camera: {}", msg),
+            AppError::FrameReadError(msg) => write!(f, "Erro ao ler frame: {}", msg),
+            AppError::WriteImageError(msg) => write!(f, "Erro ao salvar imagem: {}", msg),
+            AppError::CameraSizeError(msg) => write!(f, "Erro ao obter tamanho da camera: {}", msg),
+            AppError::CameraGuiWindowOpenError(msg) => write!(
+                f,
+                "Erro ao abrir janela grafica para apresentar imagem da camera: {}",
+                msg
             ),
-        ));
+        }
+    }
+}
+
+impl std::error::Error for AppError {}
+
+impl AppError {
+    /// Retorna codigo de saida especifico para cada tipo de erro
+    fn exit_code(&self) -> i32 {
+        match self {
+            AppError::CameraOpenError(_) => 60,
+            AppError::FrameReadError(_) => 61,
+            AppError::WriteImageError(_) => 62,
+            AppError::CameraSizeError(_) => 63,
+            AppError::CameraGuiWindowOpenError(_) => 64,
+            AppError::CameraCloseError(_) => 65,
+        }
+    }
+}
+
+/// Inicializa a câmera com o índice especificado
+fn initialize_camera(camera_index: i32) -> Result<videoio::VideoCapture, AppError> {
+    let mut camera = videoio::VideoCapture::new(camera_index, videoio::CAP_ANY)
+        .map_err(|e| AppError::CameraOpenError(e.to_string()))?;
+    if !camera
+        .is_opened()
+        .map_err(|e| AppError::CameraOpenError(e.to_string()))?
+    {
+        return Err(AppError::CameraOpenError(format!(
+            "Não foi possível abrir a câmera com o índice: {}",
+            camera_index
+        )));
     }
     Ok(camera)
 }
 
 /// Libera os recursos associados à câmera
-fn release_camera(mut camera: videoio::VideoCapture) -> Result<()> {
-    camera.release()
+fn release_camera(mut camera: videoio::VideoCapture) -> Result<(), AppError> {
+    camera
+        .release()
+        .map_err(|e| AppError::CameraCloseError(e.to_string()))
 }
 
 fn lista_cameras_acessiveis(range: impl Iterator<Item = i32>) -> Vec<i32> {
     range
         .filter_map(|index| {
-            initialize_camera(index)
-                .map(|camera| {
-                    let _ = release_camera(camera);
-                    index
-                })
-                .ok()
+            if let Ok(camera) = initialize_camera(index) {
+                let _ = release_camera(camera);
+                Some(index)
+            } else {
+                None
+            }
         })
         .collect()
 }
@@ -153,35 +199,51 @@ fn camera_set_size(camera: &mut videoio::VideoCapture, config: &Config) {
     }
 }
 
-fn camera_get_size(camera: &videoio::VideoCapture) -> Result<CameraSize> {
+fn camera_get_size(camera: &videoio::VideoCapture) -> Result<CameraSize, AppError> {
     let width = camera
         .get(videoio::CAP_PROP_FRAME_WIDTH)
-        .map_err(|e| opencv::Error::new(core::StsError, format!("Erro ao obter largura: {}", e)))?;
+        .map_err(|e| AppError::CameraSizeError(format!("Erro ao obter largura: {}", e)))?;
     let height = camera
         .get(videoio::CAP_PROP_FRAME_HEIGHT)
-        .map_err(|e| opencv::Error::new(core::StsError, format!("Erro ao obter altura: {}", e)))?;
+        .map_err(|e| AppError::CameraSizeError(format!("Erro ao obter altura: {}", e)))?;
     if width <= 0.0 || height <= 0.0 {
-        return Err(opencv::Error::new(
-            core::StsError,
-            "Dimensões inválidas: largura e altura devem ser maiores que zero".to_string(),
-        ));
+        return Err(AppError::CameraSizeError(format!(
+            "Dimensões inválidas: largura e altura devem ser maiores que zero"
+        )));
     }
     Ok(CameraSize { width, height })
 }
 
 /// Exibe os frames capturados da câmera, redimensionados com os fatores especificados
-fn display_camera_feed(camera: &mut videoio::VideoCapture, config: &Config) -> Result<()> {
-    highgui::named_window("window", highgui::WINDOW_FULLSCREEN)?;
+fn display_camera_feed(
+    camera: &mut videoio::VideoCapture,
+    config: &Config,
+) -> Result<(), AppError> {
+    highgui::named_window("window", highgui::WINDOW_FULLSCREEN).map_err(|e| {
+        AppError::CameraGuiWindowOpenError(format!(
+            "Erro ao abrir janela grafica para apresentar imagem da camera: {}",
+            e
+        ))
+    })?;
     let mut frame = Mat::default();
     let mut frame_resized = Mat::default();
 
     loop {
-        if let Err(e) = camera.read(&mut frame) {
-            eprintln!("Erro ao ler frame: {}", e);
-            continue;
-        }
+        camera
+            .read(&mut frame)
+            .map_err(|e| AppError::FrameReadError(format!("Erro ao ler frame da camera: {}", e)))?;
 
-        if frame.size()?.width > 0 {
+        if frame
+            .size()
+            .map_err(|e| {
+                AppError::FrameReadError(format!(
+                    "Erro ao ler comprimento do frame da camera: {}",
+                    e
+                ))
+            })?
+            .width
+            > 0
+        {
             imgproc::resize(
                 &frame,
                 &mut frame_resized,
@@ -190,10 +252,21 @@ fn display_camera_feed(camera: &mut videoio::VideoCapture, config: &Config) -> R
                 config.scale_y,
                 imgproc::INTER_LINEAR,
             );
-            highgui::imshow("window", &mut frame_resized)?;
+            highgui::imshow("window", &mut frame_resized).map_err(|e| {
+                AppError::CameraGuiWindowOpenError(format!(
+                    "Erro ao mostrar janela grafica para apresentar imagem da camera: {}",
+                    e
+                ))
+            })?;
+        } else {
+            return Err(AppError::FrameReadError(format!(
+                "Erro comprimento do frame retornou um valor negativo"
+            )));
         }
 
-        let key = highgui::wait_key(10)?;
+        let key = highgui::wait_key(10).map_err(|e| {
+            AppError::FrameReadError(format!("Erro ao ler tecla precionada: {}", e))
+        })?;
 
         if process_key_input(key, &frame, &config.image_name)? {
             break;
@@ -204,7 +277,7 @@ fn display_camera_feed(camera: &mut videoio::VideoCapture, config: &Config) -> R
 }
 
 /// Processa a entrada do teclado durante a exibição do feed da câmera
-fn process_key_input(key: i32, frame: &Mat, image_name: &str) -> Result<bool> {
+fn process_key_input(key: i32, frame: &Mat, image_name: &str) -> Result<bool, AppError> {
     if key > 0 && key != 255 {
         if key == 27 {
             println!("Pressionado tecla ESC, nenhuma imagem será salva.");
@@ -214,15 +287,24 @@ fn process_key_input(key: i32, frame: &Mat, image_name: &str) -> Result<bool> {
         println!("Iniciando rotina de gravação...");
         let params = core::Vector::new();
         match imgcodecs::imwrite(image_name, frame, &params) {
-            Ok(_) => println!("Gravação bem-sucedida! Arquivo salvo como: {}", image_name),
-            Err(e) => eprintln!("Erro ao salvar imagem: {}", e),
+            Ok(_) => {
+                println!("Gravação bem-sucedida! Arquivo salvo como: {}", image_name);
+                return Ok(true);
+            }
+            Err(e) => {
+                return Err(AppError::WriteImageError(format!(
+                    "Erro ao salvar imagem: {}",
+                    e
+                )))
+            }
         }
-        return Ok(true);
     }
     Ok(false)
 }
 
-fn listar_resolucoes_suportadas(camera: &mut videoio::VideoCapture) -> Vec<(i32, i32)> {
+fn listar_resolucoes_suportadas(
+    camera: &mut videoio::VideoCapture,
+) -> Result<Vec<(i32, i32)>, AppError> {
     let resolucoes_comuns = vec![
         (160, 120),
         (320, 240),
@@ -261,23 +343,37 @@ fn listar_resolucoes_suportadas(camera: &mut videoio::VideoCapture) -> Vec<(i32,
     for (w, h) in resolucoes_comuns.iter() {
         camera
             .set(videoio::CAP_PROP_FRAME_WIDTH, *w as f64)
-            .unwrap();
+            .map_err(|e| {
+                AppError::CameraSizeError(format!(
+                    "Erro ao definir largura da camera para {} pixels: {}",
+                    w, e
+                ))
+            })?;
         camera
             .set(videoio::CAP_PROP_FRAME_HEIGHT, *h as f64)
-            .unwrap();
+            .map_err(|e| {
+                AppError::CameraSizeError(format!(
+                    "Erro ao definir altura da camera para {} pixels: {}",
+                    w, e
+                ))
+            })?;
 
-        let width = camera.get(videoio::CAP_PROP_FRAME_WIDTH).unwrap() as i32;
-        let height = camera.get(videoio::CAP_PROP_FRAME_HEIGHT).unwrap() as i32;
+        let width = camera.get(videoio::CAP_PROP_FRAME_WIDTH).map_err(|e| {
+            AppError::CameraSizeError(format!("Erro ao obter largura da camera: {}", e))
+        })? as i32;
+        let height = camera.get(videoio::CAP_PROP_FRAME_HEIGHT).map_err(|e| {
+            AppError::CameraSizeError(format!("Erro ao obter altura da camera: {}", e))
+        })? as i32;
 
         if width == *w && height == *h {
             resolucoes_suportadas.push((*w, *h));
         }
     }
 
-    resolucoes_suportadas
+    Ok(resolucoes_suportadas)
 }
 
-fn main() -> Result<()> {
+fn run_app() -> Result<(), AppError> {
     // Parse dos argumentos via linha de comando
     let config = Config::parse();
 
@@ -293,7 +389,7 @@ fn main() -> Result<()> {
     println!("Câmera inicializada com sucesso!");
 
     if config.detect_resolutions {
-        let resolucoes = listar_resolucoes_suportadas(&mut camera);
+        let resolucoes = listar_resolucoes_suportadas(&mut camera)?;
         println!("Resoluções suportadas pela câmera:");
         for (w, h) in resolucoes {
             println!("{}x{}", w, h);
@@ -314,5 +410,15 @@ fn main() -> Result<()> {
         display_camera_feed(&mut camera, &config)?;
 
         Ok(())
+    }
+}
+
+fn main() {
+    match run_app() {
+        Ok(_) => std::process::exit(0), // Sucesso retorna 0
+        Err(e) => {
+            eprintln!("Erro: {}", e);
+            std::process::exit(e.exit_code()); // Retorna o codigo de erro especifico
+        }
     }
 }
