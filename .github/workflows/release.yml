@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*' # Trigger on version tags
+  workflow_dispatch: # Permite execução manual pelo GitHub
 
 permissions:
   contents: write
