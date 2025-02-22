@@ -46,7 +46,7 @@ jobs:
         with:
           profile: minimal
           override: true
-          toolchain: stable
+          toolchain: 1.85.0
 
       # Build project
       - name: Build project
