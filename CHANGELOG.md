@@ -1,5 +1,5 @@
 ## Registro de Mudancas
-## [unreleased]
+
 
 ## [1.4.8] - 2025-02-22
 
