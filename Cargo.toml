@@ -10,5 +10,3 @@ clap = { version = "4.3", features = ["derive"] }
 opencv = "0.93.3"
 prettytable = "0.10"
 
-[dev-dependencies]
-git-cliff = "2.8.0"
