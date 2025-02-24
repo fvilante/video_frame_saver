@@ -1,70 +1,57 @@
-## Registro de Mudancas
+# Histórico de Mudanças
 
+Todas as mudanças relevantes neste projeto são documentadas neste arquivo.
 
-## [1.4.8] - 2025-02-22
+Este formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
+e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
-### Feat
-- Programa agora retorna codigo de erro ao sistema operacional para facilitar integracao.
-- Adicionado arquivos junto a distribuicao: 
-    - "GUIA_DE_USO.txt" para orientar o usuario.
-    - "CODIGOS_DE_ERRO.txt" para documentar os tipos e codigos de erros gerados pelo programa.
+## [proxima_versao] - Em andamento
 
-### Ci
-- Update Rust toolchain to 1.85.0
-- Permite acionar o build manualmente pelo site do GitHub.
+### Adicionado
+- Codigos de erros detalhados retornado ao sistema operacinoal [#4](https://github.com/fvilante/video_frame_saver/issues/4)
+- Documentação de registro de mudanças historicas entre as versoes. [#6](https://github.com/fvilante/video_frame_saver/issues/6)
+- Melhor documentação acompanha a distribuicao. [#3](https://github.com/fvilante/video_frame_saver/issues/3)
 
-### Docs
-- Revisao da documentacao do projeto.
-- Documentacao dos codigos de erro no README.
-
-
----
+[proxima_versao]: https://github.com/fvilante/video_frame_saver/compare/v1.4.7...dev 
 
 ## [1.4.7] - 2025-02-14
 
-### Build
-- Esta versao para todos os efeitos praticos é igual a versao 1.4.6.
-- Aperfeicoado a forma como o codigo-fonte é compilada e distribuido.
+### Corrigido
+- Forma como o programa é compilado automaticamente na nuvem.
 
 
----
 
 ## [1.4.6] - 2025-02-14
 
-### Feat
-- Adicionado funcionalidade para redefinir e/ou detectar resolucoes admitidas na camera.
+### Adicionado
+- Suporte ao controle de resolução da câmera [#2](https://github.com/fvilante/video_frame_saver/issues/2).
+- Metodo de autodetecção de resolução da camera.
 
----
 
 ## [1.4.4] - 2024-11-26
 
-### **Resumo de Mudancas das Versoes Anteriores**
+### Adicionado
 
-Esta versao e as anteriores introduziram as principais funcionalidades do **video_frame_saver**, incluindo:
+- Código reescrito em Rust para melhor desempenho e estabilidade.
+- Distribuição agora inclui arquivo `.dll`. 
+- Suporte aprimorado para múltiplas câmeras e ajuste de escala.
+- Help na linha de comando adicionada facilitar utilização.
 
-- **Estrutura Inicial do Projeto**:  
-  - Primeira versao escrita em **Rust**, substituindo uma versao anterior em Python.  
-  - Organizacao inicial do projeto com `cargo` e configuracoes do `.gitignore`.
 
-- **Suporte a OpenCV**:  
-  - Configuracao de captura de video utilizando OpenCV.  
-  - Implementacao de leitura e escrita de frames.
+## [1.0.0] - 2024-11-20
 
-- **Linha de Comando**:  
-  - Implementacao de CLI para configurar a camera e capturar frames.  
-  - Parametros para escolher **indice da camera, resolucao e escala da imagem**.
+### Adicionado
 
-- **Automacao e Distribuicao**:  
-  - Integracao com **GitHub Actions** para automatizar build e releases.  
-  - Geracao de binarios para Windows com empacotamento via ZIP.
+- Suporte a múltiplos sistemas operacionais compatíveis com Python (Windows, Linux, etc.).
+- Captura de vídeo de uma câmera externa conectada via USB.
+- Exibição imediata da imagem capturada em uma janela.
+- Salvamento de um frame ao pressionar a tecla espaço, gerando o arquivo imagem_capturada.bmp no diretório do executável.
+- Encerramento automático após a captura da imagem.
 
-- **Melhorias Progressivas**:  
-  - **Deteccao de cameras disponiveis** conectadas ao sistema.  
-  - **Suporte para leitura de parametros da linha de comando**.  
-  - **Geracao automatica de releases** com executavel e dependencias.  
 
-A partir da versao **1.4.4**, o foco passou a ser **melhorar a estabilidade e adicionar funcionalidades especificas**.
 
----
-
-Vilante Labs (c) 2025
+[1.4.7]: https://github.com/fvilante/video_frame_saver/compare/v1.4.6...v1.4.7  
+[1.4.6]: https://github.com/fvilante/video_frame_saver/compare/v1.4.4...v1.4.6  
+[1.4.4]: https://github.com/fvilante/video_frame_saver/compare/v1.0.0...v1.4.4  
+[1.4.4]: https://github.com/fvilante/video_frame_saver/compare/v1.0.0...v1.4.4 
+[1.0.0]: https://github.com/fvilante/video_frame_saver/releases/tag/v0.0.1
