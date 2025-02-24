@@ -67,7 +67,7 @@ jobs:
           copy docs/GUIA_DE_USO.txt release_files/
           copy docs/CODIGOS_DE_ERRO.txt release_files/
           copy CHANGELOG.md release_files/
-          copy docs/MANUAL_COMPLETO.md /release_files/
+          copy docs/MANUAL_COMPLETO.md release_files/
           copy README.md release_files/
 
       # Package files into a ZIP
