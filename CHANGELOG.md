@@ -17,7 +17,7 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 ## [1.4.7] - 2025-02-14
 
 ### Corrigido
-- Correção na forma como o programa é compilado automaticamente na nuvem.
+- Forma como o programa é compilado automaticamente na nuvem.
 
 
 
