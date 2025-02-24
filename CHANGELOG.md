@@ -8,9 +8,9 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 ## [Proxima versao (Em andamento)]
 
 ### Adicionado
-- Codigos de erros detalhados retornado ao sistema operacinoal (issue #4)
-- Documentação de registro de mudanças historicas entre as versoes. (issue #6)
-- Melhor documentação acompanha a distribuicao. (issue #3)
+- Codigos de erros detalhados retornado ao sistema operacinoal [#4](https://github.com/fvilante/video_frame_saver/issues/4)
+- Documentação de registro de mudanças historicas entre as versoes. [#6](https://github.com/fvilante/video_frame_saver/issues/6)
+- Melhor documentação acompanha a distribuicao. [#3](https://github.com/fvilante/video_frame_saver/issues/3)
 
 
 ## [1.4.7] - 2025-02-14
@@ -23,7 +23,7 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 ## [1.4.6] - 2025-02-14
 
 ### Adicionado
-- Suporte ao controle de resolução da câmera (issue #2).
+- Suporte ao controle de resolução da câmera [#2](https://github.com/fvilante/video_frame_saver/issues/2).
 - Metodo de autodetecção de resolução da camera.
 
 
