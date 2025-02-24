@@ -9,8 +9,10 @@ O pacote contem os seguintes arquivos:
 
 - video_frame_saver.exe    -> O executavel principal.
 - opencv_world4100.dll     -> Biblioteca necessaria para o funcionamento do programa.
-- CODIGOS_DE_ERRO.txt      -> Os codigos de erro que o programa pode emitir
-- GUIA_DE_USO.txt          -> Orientacoes sobre como usar o programa corretamente
+- CODIGOS_DE_ERRO.txt      -> Lista de codigos de erro retornados pelo programa.
+- GUIA_DE_USO.txt          -> Guia rapido de uso do programa.
+- MANUAL_COMPLETO.md       -> Manual com informacoes detalhadas.
+- CHANGELOG.md             -> Registro de mudancas e melhorias do projeto.
 
 ===========================================
  INSTRUCOES DE USO
