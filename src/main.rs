@@ -197,26 +197,20 @@ fn camera_set_size(camera: &mut videoio::VideoCapture, config: &Config) -> Resul
         if config.verbose {
             println!("Definindo resolução da câmera para {}x{}", w, h);
         }
-        camera
-            .set(videoio::CAP_PROP_FRAME_WIDTH, w as f64)
-            .map_err(|e| {
+
+        for (prop, val, desc) in [
+            (videoio::CAP_PROP_FRAME_WIDTH, w as f64, "largura"),
+            (videoio::CAP_PROP_FRAME_HEIGHT, h as f64, "altura"),
+        ] {
+            camera.set(prop, val).map_err(|e| {
                 AppError::CameraSizeError(format!(
-                    "Erro ao setar largura de resolucao da camera: {}",
-                    e
+                    "Erro ao definir {} da câmera para {} pixels: {}",
+                    desc, val, e
                 ))
             })?;
-        camera
-            .set(videoio::CAP_PROP_FRAME_HEIGHT, h as f64)
-            .map_err(|e| {
-                AppError::CameraSizeError(format!(
-                    "Erro ao setar altura de resolucao da camera: {}",
-                    e
-                ))
-            })?;
-        return Ok(());
+        }
     } else if config.verbose {
         println!("Usando resolução padrão da câmera.");
-        return Ok(());
     }
     Ok(())
 }
