@@ -28,7 +28,7 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 - Metodo de autodetecção de resolução da camera.
 
 
-## [1.4.4] - 2025-02-14
+## [1.4.4] - 2024-11-26
 
 ### Adicionado
 
