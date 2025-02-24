@@ -38,7 +38,20 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 - Help na linha de comando adicionada facilitar utilização.
 
 
-[1.5.0]: https://github.com/fvilante/video_frame_saver/compare/v1.4.7...v1.5.0 
+## [1.0.0] - 2024-11-20
+
+### Adicionado
+
+- Suporte a múltiplos sistemas operacionais compatíveis com Python (Windows, Linux, etc.).
+- Captura de vídeo de uma câmera externa conectada via USB.
+- Exibição imediata da imagem capturada em uma janela.
+- Salvamento de um frame ao pressionar a tecla espaço, gerando o arquivo imagem_capturada.bmp no diretório do executável.
+- Encerramento automático após a captura da imagem.
+
+
+
 [1.4.7]: https://github.com/fvilante/video_frame_saver/compare/v1.4.6...v1.4.7  
 [1.4.6]: https://github.com/fvilante/video_frame_saver/compare/v1.4.4...v1.4.6  
 [1.4.4]: https://github.com/fvilante/video_frame_saver/compare/v1.0.0...v1.4.4  
+[1.4.4]: https://github.com/fvilante/video_frame_saver/compare/v1.0.0...v1.4.4 
+[1.0.0]: https://github.com/fvilante/video_frame_saver/releases/tag/v0.0.1
