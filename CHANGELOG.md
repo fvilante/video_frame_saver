@@ -29,7 +29,8 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 
 
 ## [1.4.4] - 2025-02-14
-# Adicionado
+
+### Adicionado
 
 - Código reescrito em Rust para melhor desempenho e estabilidade.
 - Distribuição agora inclui arquivo `.dll`. 
