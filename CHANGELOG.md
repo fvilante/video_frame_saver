@@ -5,13 +5,14 @@ Todas as mudanças relevantes neste projeto são documentadas neste arquivo.
 Este formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
-## [Proxima versao (Em andamento)]
+## [proxima_versao] - Em andamento
 
 ### Adicionado
 - Codigos de erros detalhados retornado ao sistema operacinoal [#4](https://github.com/fvilante/video_frame_saver/issues/4)
 - Documentação de registro de mudanças historicas entre as versoes. [#6](https://github.com/fvilante/video_frame_saver/issues/6)
 - Melhor documentação acompanha a distribuicao. [#3](https://github.com/fvilante/video_frame_saver/issues/3)
 
+[proxima_versao]: https://github.com/fvilante/video_frame_saver/compare/v1.4.7...dev 
 
 ## [1.4.7] - 2025-02-14
 
