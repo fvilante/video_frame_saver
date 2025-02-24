@@ -2,6 +2,71 @@ use clap::Parser;
 use opencv::{core, highgui, imgcodecs, imgproc, prelude::*, videoio, Result};
 use prettytable::{color, Attr, Cell, Row, Table};
 
+use fern::Dispatch;
+use log::{debug, info, trace, warn};
+use std::{io, time::SystemTime};
+
+fn setup_logging(verbosity: u64) -> Result<(), fern::InitError> {
+    let mut base_config = fern::Dispatch::new();
+
+    base_config = match verbosity {
+        0 => {
+            // Let's say we depend on something which whose "info" level messages are too
+            // verbose to include in end-user output. If we don't need them,
+            // let's not include them.
+            base_config
+                .level(log::LevelFilter::Info)
+                .level_for("overly-verbose-target", log::LevelFilter::Warn)
+        }
+        1 => base_config
+            .level(log::LevelFilter::Debug)
+            .level_for("overly-verbose-target", log::LevelFilter::Info),
+        2 => base_config.level(log::LevelFilter::Debug),
+        _3_or_more => base_config.level(log::LevelFilter::Trace),
+    };
+
+    // Separate file config so we can include year, month and day in file logs
+    let file_config = fern::Dispatch::new()
+        .format(|out, message, record| {
+            out.finish(format_args!(
+                "[{} {} {}] {}",
+                humantime::format_rfc3339_seconds(SystemTime::now()),
+                record.level(),
+                record.target(),
+                message
+            ))
+        })
+        .chain(fern::log_file("program.log")?);
+
+    let stdout_config = fern::Dispatch::new()
+        .format(|out, message, record| {
+            // special format for debug messages coming from our own crate.
+            if record.level() > log::LevelFilter::Info && record.target() == "cmd_program" {
+                out.finish(format_args!(
+                    "DEBUG @ {}: {}",
+                    humantime::format_rfc3339_seconds(SystemTime::now()),
+                    message
+                ))
+            } else {
+                out.finish(format_args!(
+                    "[{} {} {}] {}",
+                    humantime::format_rfc3339_seconds(SystemTime::now()),
+                    record.level(),
+                    record.target(),
+                    message
+                ))
+            }
+        })
+        .chain(io::stdout());
+
+    base_config
+        .chain(file_config)
+        .chain(stdout_config)
+        .apply()?;
+
+    Ok(())
+}
+
 /// Configurações do programa obtidas via linha de comando
 #[derive(Parser, Debug)]
 #[command(
@@ -393,6 +458,13 @@ fn listar_resolucoes_suportadas(
 }
 
 fn run_app() -> Result<(), AppError> {
+    let verbosity: u64 = 0; //cmd_arguments.occurrences_of("verbose");
+    setup_logging(verbosity).expect("failed to initialize logging.");
+
+    info!("Hello, world!");
+    warn!("Warning!");
+    debug!("Now exiting.");
+
     // Parse dos argumentos via linha de comando
     let config = Config::parse();
 
