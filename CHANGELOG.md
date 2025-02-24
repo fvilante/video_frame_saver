@@ -5,7 +5,7 @@ Todas as mudanças relevantes neste projeto são documentadas neste arquivo.
 Este formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
-## [Em andamento]
+## [Proxima versao (Em andamento)]
 
 ### Adicionado
 - Codigos de erros detalhados retornado ao sistema operacinoal (#4)
@@ -13,20 +13,12 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 - Melhor documentação acompanha a distribuicao. (#3)
 
 
-### Histórico Completo
-[Em andamento]: https://github.com/fvilante/video_frame_saver/compare/v1.4.7...HEAD
-
----
-
 ## [1.4.7] - 2025-02-14
 
 ### Corrigido
 - Correção na forma como o programa é compilado automaticamente na nuvem.
 
-### Histórico Completo
-[v1.4.6...v1.4.7](https://github.com/fvilante/video_frame_saver/compare/v1.4.6...v1.4.7)
 
----
 
 ## [1.4.6] - 2025-02-14
 
@@ -35,11 +27,8 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 - Metodo de autodetecção de resolução da camera.
 
 
-### Histórico Completo
-[v1.4.4...v1.4.6](https://github.com/fvilante/video_frame_saver/compare/v1.4.4...v1.4.6)
 
----
-
+[1.5.0]: https://github.com/fvilante/video_frame_saver/compare/v1.4.7...v1.5.0 
 [1.4.7]: https://github.com/fvilante/video_frame_saver/compare/v1.4.6...v1.4.7  
 [1.4.6]: https://github.com/fvilante/video_frame_saver/compare/v1.4.4...v1.4.6  
 [1.4.4]: https://github.com/fvilante/video_frame_saver/compare/v1.4.3...v1.4.4  
