@@ -28,16 +28,16 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 - Metodo de autodetecção de resolução da camera.
 
 
+## [1.4.4] - 2025-02-14
+# Adicionado
+
+- Código reescrito em Rust para melhor desempenho e estabilidade.
+- Distribuição agora inclui arquivo `.dll`. 
+- Suporte aprimorado para múltiplas câmeras e ajuste de escala.
+- Help na linha de comando adicionada facilitar utilização.
+
 
 [1.5.0]: https://github.com/fvilante/video_frame_saver/compare/v1.4.7...v1.5.0 
 [1.4.7]: https://github.com/fvilante/video_frame_saver/compare/v1.4.6...v1.4.7  
 [1.4.6]: https://github.com/fvilante/video_frame_saver/compare/v1.4.4...v1.4.6  
-[1.4.4]: https://github.com/fvilante/video_frame_saver/compare/v1.4.3...v1.4.4  
-[1.4.3]: https://github.com/fvilante/video_frame_saver/compare/v1.4.2...v1.4.3  
-[1.4.2]: https://github.com/fvilante/video_frame_saver/compare/v1.4.1...v1.4.2  
-[1.4.1]: https://github.com/fvilante/video_frame_saver/compare/v1.4.0...v1.4.1  
-[1.4.0]: https://github.com/fvilante/video_frame_saver/compare/v1.0.3...v1.4.0  
-[1.0.3]: https://github.com/fvilante/video_frame_saver/compare/v1.0.2...v1.0.3  
-[1.0.2]: https://github.com/fvilante/video_frame_saver/compare/v1.0.1...v1.0.2  
-[1.0.1]: https://github.com/fvilante/video_frame_saver/compare/v1.0.0...v1.0.1  
-[1.0.0]: https://github.com/fvilante/video_frame_saver/releases/tag/v1.0.0  
+[1.4.4]: https://github.com/fvilante/video_frame_saver/compare/v1.0.0...v1.4.4  
