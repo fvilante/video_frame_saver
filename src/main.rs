@@ -5,7 +5,7 @@ use prettytable::{color, Attr, Cell, Row, Table};
 /// Configurações do programa obtidas via linha de comando
 #[derive(Parser, Debug)]
 #[command(
-    author = "Flavio Vilante <fvilante1@gmail.com>",
+    author = "Vilante Labs (C) 2025", // Flavio Vilante
     version = env!("CARGO_PKG_VERSION"),
     about = "video_frame_saver",
     long_about = "
