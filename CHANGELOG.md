@@ -40,8 +40,6 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 
 ---
 
-### Histórico de Versões Anteriores
-
 [1.4.7]: https://github.com/fvilante/video_frame_saver/compare/v1.4.6...v1.4.7  
 [1.4.6]: https://github.com/fvilante/video_frame_saver/compare/v1.4.4...v1.4.6  
 [1.4.4]: https://github.com/fvilante/video_frame_saver/compare/v1.4.3...v1.4.4  
