@@ -106,6 +106,8 @@ execute:
 
    video_frame_saver.exe --help
 
-Ultima atualizacao: 22/02/2025
 
-Desenvolvido por Flavio Vilante.
+
+---
+
+Vilante Labs (C) 2025

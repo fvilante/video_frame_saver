@@ -116,4 +116,4 @@ O arquivo de configuração responsável por essa automação pode ser encontrad
 
 -------------------------------------
 
-Vilante Labs 2024 (C)
+Vilante Labs (C) 2025

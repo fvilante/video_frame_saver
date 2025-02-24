@@ -96,4 +96,4 @@ Para visualizar codigo fonte acesse:
 
 Este software e distribuido sob os termos da licenca MIT.
 
-Desenvolvido por Vilante Labs (C) 2025 
+Vilante Labs (C) 2025 

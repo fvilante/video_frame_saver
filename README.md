@@ -9,16 +9,19 @@ O software suporta múltiplos parâmetros de configuração, como a seleção da
 
 ## Instalação e Uso Básico
 
-1. Extraia todos os arquivos do ZIP para uma mesma pasta.
-2. Certifique-se de que o arquivo `opencv_world4100.dll` está no mesmo diretório do executável.
-3. Execute o programa pelo terminal:
+1. Faça [download] do arquivo ZIP correspondente a versao que deseja instalar.
+2. Extraia todos os arquivos do ZIP para uma mesma pasta.
+3. Certifique-se de que o arquivo `opencv_world4100.dll` está no mesmo diretório do executável.
+4. Execute o programa pelo terminal:
+
+[download]: https://github.com/fvilante/video_frame_saver/releases
 
    ```sh
    video_frame_saver.exe
    ```
 
-4. Pressione **espaço** para capturar um frame.
-5. Pressione **ESC** para sair.
+5. Pressione **espaço** para capturar um frame.
+6. Pressione **ESC** para sair.
 
 Para ver as opções disponíveis:
 
@@ -51,3 +54,5 @@ Caso encontre algum problema, por favor, registre um **issue** no GitHub:
 Este projeto é distribuído sob a licença **MIT**.
 
 📌 Repositório Oficial: [GitHub](https://github.com/fvilante/video_frame_saver)
+
+Vilante Labs (C) 2025
