@@ -22,11 +22,10 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 
 ### Adicionado
 
-- Retorna [código de erros mais detalhados] para o sistema operacional [#4](https://github.com/fvilante/video_frame_saver/issues/4)
+- Retorna [código de erros mais detalhados](https://github.com/fvilante/video_frame_saver/blob/main/docs/CODIGOS_DE_ERRO.txt) para o sistema operacional [#4](https://github.com/fvilante/video_frame_saver/issues/4)
 - Documentação de registro de mudanças historicas entre as versoes. [#6](https://github.com/fvilante/video_frame_saver/issues/6)
 - Melhor documentação acompanha a distribuicao. [#3](https://github.com/fvilante/video_frame_saver/issues/3)
 
-[código de erros mais detalhados]: (https://github.com/fvilante/video_frame_saver/blob/main/docs/CODIGOS_DE_ERRO.txt)
 [1.5.0]: https://github.com/fvilante/video_frame_saver/compare/v1.4.7...v1.5.0
 
 ## [1.4.7] - 2025-02-14
