@@ -13,6 +13,9 @@ target/
 # imagem gerada pelo aplicativo
 imagem_capturada.bmp
 
+# arquivo de log (com dados de telemetria da execucao do programa)
+video_frame_saver.log
+
 
 # Arquivos de artefatos gerados pelo PyInstaler
 build/
