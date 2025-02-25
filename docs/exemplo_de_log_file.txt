@@ -1,0 +1,36 @@
+[2025-02-25T04:18:39Z TRACE video_frame_saver] Programa iniciado - versao 1.6.0
+[2025-02-25T04:18:39Z TRACE video_frame_saver] Parametros: target\debug\video_frame_saver.exe --log-file --detect-resolutions
+[2025-02-25T04:18:39Z INFO video_frame_saver] Camera inicializada com sucesso!
+[2025-02-25T04:18:39Z INFO video_frame_saver] Resolucoes suportadas pela camera:
+[2025-02-25T04:18:39Z INFO video_frame_saver] 320x240
+[2025-02-25T04:18:39Z INFO video_frame_saver] 640x480
+[2025-02-25T04:18:39Z INFO video_frame_saver] 1280x720
+[2025-02-25T04:18:39Z INFO video_frame_saver] 960x540
+[2025-02-25T04:18:39Z TRACE video_frame_saver] Programa finalizado com sucesso
+[2025-02-25T04:18:45Z TRACE video_frame_saver] Programa iniciado - versao 1.6.0
+[2025-02-25T04:18:45Z TRACE video_frame_saver] Parametros: target\debug\video_frame_saver.exe --log-file --list
+[2025-02-25T04:18:45Z TRACE video_frame_saver] Camera 0 acessivel
+[2025-02-25T04:18:46Z TRACE video_frame_saver] Camera 1 acessivel
+[2025-02-25T04:18:46Z TRACE video_frame_saver] Programa finalizado com sucesso
+[2025-02-25T04:27:42Z TRACE video_frame_saver] Programa iniciado - versao 1.6.1-alpha.1
+[2025-02-25T04:27:42Z TRACE video_frame_saver] Parametros: target\debug\video_frame_saver.exe --log-file --list
+[2025-02-25T04:27:43Z TRACE video_frame_saver] Camera 0 acessivel
+[2025-02-25T04:27:43Z TRACE video_frame_saver] Camera 1 acessivel
+[2025-02-25T04:27:43Z TRACE video_frame_saver] Programa finalizado com sucesso
+[2025-02-25T04:29:01Z TRACE video_frame_saver] Programa iniciado - versao 1.6.1-alpha.1
+[2025-02-25T04:29:01Z TRACE video_frame_saver] Parametros: target\debug\video_frame_saver.exe --log-file --list
+[2025-02-25T04:29:01Z TRACE video_frame_saver] Camera 0 acessivel
+[2025-02-25T04:29:01Z TRACE video_frame_saver] Camera 1 acessivel
+[2025-02-25T04:29:02Z TRACE video_frame_saver] Programa finalizado com sucesso
+[2025-02-25T04:34:12Z TRACE video_frame_saver] Programa iniciado - versao 1.6.1-alpha.1
+[2025-02-25T04:34:12Z TRACE video_frame_saver] Parametros: target\debug\video_frame_saver.exe --log-file --list
+[2025-02-25T04:34:12Z TRACE video_frame_saver] Buscando camera entre IDs 0 e 9
+[2025-02-25T04:34:13Z TRACE video_frame_saver] Camera 0 acessÃ­vel
+[2025-02-25T04:34:13Z TRACE video_frame_saver] Camera 1 acessÃ­vel
+[2025-02-25T04:34:13Z TRACE video_frame_saver] Programa finalizado com sucesso
+[2025-02-25T04:35:02Z TRACE video_frame_saver] Programa iniciado - versao 1.6.1-alpha.1
+[2025-02-25T04:35:02Z TRACE video_frame_saver] Parametros: target\debug\video_frame_saver.exe --log-file --list
+[2025-02-25T04:35:02Z TRACE video_frame_saver] Buscando camera entre IDs 0 e 9
+[2025-02-25T04:35:02Z TRACE video_frame_saver] Camera 0 acessivel
+[2025-02-25T04:35:02Z TRACE video_frame_saver] Camera 1 acessivel
+[2025-02-25T04:35:03Z TRACE video_frame_saver] Programa finalizado com sucesso
