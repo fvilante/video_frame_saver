@@ -13,10 +13,10 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 
 ### Adicionado
 - Opção de salvar arquivo de log com dados levantados durante execução do programa. Util para depuracao de erros em campo.
-- Cores as mensagens impressas ao usuario.
+- Cores nas mensagens impressas ao usuario. [#5](https://github.com/fvilante/video_frame_saver/issues/5)
 
+[1.6.0]: https://github.com/fvilante/video_frame_saver/compare/v1.5.0...v1.6.0
 
-[#5]: https://github.com/fvilante/video_frame_saver/issues/5
 
 ## [1.5.0] - 2025-02-24
 
