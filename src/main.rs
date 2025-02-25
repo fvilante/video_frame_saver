@@ -222,8 +222,15 @@ fn release_camera(mut camera: videoio::VideoCapture) -> Result<(), AppError> {
         .map_err(|e| AppError::CameraCloseError(e.to_string()))
 }
 
-fn lista_cameras_acessiveis(range: impl Iterator<Item = i32>) -> Vec<i32> {
-    range
+fn lista_cameras_acessiveis(range: impl Iterator<Item = i32> + Clone) -> Vec<i32> {
+    let vec_range: Vec<i32> = range.clone().collect(); // Clona os valores do iterador
+
+    if let (Some(first), Some(last)) = (vec_range.first(), vec_range.last()) {
+        trace!("Buscando camera entre IDs {} e {}", first, last);
+    }
+
+    vec_range
+        .into_iter()
         .filter_map(|index| {
             if let Ok(camera) = initialize_camera(index) {
                 trace!("Camera {} acessivel", index);
