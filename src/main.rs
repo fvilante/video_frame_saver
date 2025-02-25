@@ -6,27 +6,35 @@ use fern::Dispatch;
 use log::{debug, error, info, trace, warn};
 use std::{io, time::SystemTime};
 
-fn setup_logging() -> Result<(), fern::InitError> {
+fn setup_logging(config: &Config) -> Result<(), fern::InitError> {
     let mut base_config = fern::Dispatch::new();
 
-    // Separate file config so we can include year, month and day in file logs
-    let file_config = fern::Dispatch::new()
-        .level(log::LevelFilter::Trace)
-        .format(|out, message, record| {
-            out.finish(format_args!(
-                "[{} {} {}] {}",
-                humantime::format_rfc3339_seconds(SystemTime::now()),
-                record.level(),
-                record.target(),
-                message
-            ))
-        })
-        .chain(fern::log_file("program.log")?);
+    let x = config.log_file;
 
+    // Se o usuário passou explicitamente --log-file, adicionamos log para arquivo
+    if config.log_file {
+        let log_file_name = config.log_file_name.clone();
+        // Correção aqui
+        let file_config = fern::Dispatch::new()
+            .level(log::LevelFilter::Trace)
+            .format(|out, message, record| {
+                out.finish(format_args!(
+                    "[{} {} {}] {}",
+                    humantime::format_rfc3339_seconds(SystemTime::now()),
+                    record.level(),
+                    record.target(),
+                    message
+                ))
+            })
+            .chain(fern::log_file(log_file_name)?); // Usa o nome do arquivo fornecido pelo usuário
+
+        base_config = base_config.chain(file_config);
+    }
+
+    // Configuração do log para stdout
     let stdout_config = fern::Dispatch::new()
         .level(log::LevelFilter::Info)
         .format(|out, message, record| {
-            // special format for debug messages coming from our own crate.
             if record.level() > log::LevelFilter::Info && record.target() == "cmd_program" {
                 out.finish(format_args!(
                     "DEBUG @ {}: {}",
@@ -45,10 +53,8 @@ fn setup_logging() -> Result<(), fern::InitError> {
         })
         .chain(io::stdout());
 
-    base_config
-        .chain(file_config)
-        .chain(stdout_config)
-        .apply()?;
+    // Aplica a configuração de logging
+    base_config.chain(stdout_config).apply()?;
 
     Ok(())
 }
@@ -71,31 +77,31 @@ FUNCIONALIDADES PRINCIPAIS:
     "
 )]
 struct Config {
-    /// Índice da câmera a ser usada
+    /// Índice da câmera a ser usada.
     #[arg(short = 'c', long, default_value_t = 0)]
     camera_index: i32,
 
-    /// Fator de escala horizontal
+    /// Fator de escala horizontal.
     #[arg(short = 'x', long, default_value_t = 1.0)]
     scale_x: f64,
 
-    /// Fator de escala vertical
+    /// Fator de escala vertical.
     #[arg(short = 'y', long, default_value_t = 1.0)]
     scale_y: f64,
 
-    /// Nome do arquivo de saída
+    /// Nome do arquivo de saída.
     #[arg(short = 'f', long, default_value = "imagem_capturada.bmp")]
     image_name: String,
 
-    /// Detecta e apresenta a listagem das câmeras acessíveis
+    /// Detecta e apresenta a listagem das câmeras acessíveis.
     #[arg(short = 'l', long)]
     list: bool,
 
-    /// Range inicial para buscar câmeras
+    /// Range inicial para buscar câmeras.
     #[arg(long, default_value_t = 0)]
     range_start: i32,
 
-    /// Range final para buscar câmeras
+    /// Range final para buscar câmeras.
     #[arg(long, default_value_t = 10)]
     range_end: i32,
 
@@ -107,7 +113,7 @@ struct Config {
     #[arg(long)]
     height: Option<i32>,
 
-    /// Ativa modo verbose para depuração (ativa todas as opções de saída detalhada)
+    /// Ativa modo verbose para depuração (ativa todas as opções de saída detalhada).
     #[arg(long)]
     verbose: bool,
 
@@ -115,9 +121,13 @@ struct Config {
     #[arg(long)]
     detect_resolutions: bool,
 
-    /// Ativa gravação de eventos do programa em um arquivo de log. Se o arquivo já existir, os dados serão adicionados ao final.
+    /// Ativa gravação de dados de telemetria em arquivo de log. Se o arquivo já existir, concatena dados.
+    #[arg(long)]
+    log_file: bool,
+
+    /// Escolhe um nome para o arquivo de log. Utilize em conjunto com '--log-file'.
     #[arg(short = 'o', long, default_value = "video_frame_saver.log")]
-    log_file: String,
+    log_file_name: String,
 }
 
 #[derive(Debug)]
@@ -491,7 +501,7 @@ fn main() {
     let version = env!("CARGO_PKG_VERSION");
 
     // configura logging
-    setup_logging().expect("failed to initialize logging.");
+    setup_logging(&config).expect("failed to initialize logging.");
     trace!("Programa iniciado - versao {}", version);
 
     // executa aplicativo
