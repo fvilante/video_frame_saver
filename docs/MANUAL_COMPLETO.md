@@ -157,6 +157,7 @@ Os bugs conhecidos podem ser visualizados [aqui](https://github.com/fvilante/vid
 | [Códigos de Erro](https://github.com/fvilante/video_frame_saver/blob/main/docs/CODIGOS_DE_ERRO.txt) | Lista de códigos de erro retornados pelo programa e possíveis soluções. |
 | [Como Compilar](https://github.com/fvilante/video_frame_saver/blob/main/docs/COMO_COMPILAR.md) | Instruções para compilar o programa a partir do código-fonte. |
 | [Histórico de Mudanças](https://github.com/fvilante/video_frame_saver/blob/main/CHANGELOG.md) | Registro de mudanças e melhorias do projeto. |
+| [Exemplo de log file](https://github.com/fvilante/video_frame_saver/blob/main/docs/exemplo_de_log_file.txt) | Exemplo do arquivo criado ao se utilizar o parametro `--log-file` |
 
 ---
 
