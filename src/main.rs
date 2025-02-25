@@ -1,3 +1,7 @@
+use clap::builder::styling::Style;
+use clap::builder::Styles;
+use clap::ColorChoice;
+use clap::CommandFactory;
 use clap::Parser;
 use opencv::{core, highgui, imgcodecs, imgproc, prelude::*, videoio, Result};
 use prettytable::{color, Attr, Cell, Row, Table};
@@ -91,6 +95,7 @@ FUNCIONALIDADES PRINCIPAIS:
 - Scaneia portas para identificar cameras acessiveis
     "
 )]
+#[command(styles=get_styles())]
 struct Config {
     /// Índice da câmera a ser usada.
     #[arg(short = 'c', long, default_value_t = 0)]
@@ -509,8 +514,47 @@ fn run_app(config: &Config) -> Result<(), AppError> {
     }
 }
 
+pub fn get_styles() -> clap::builder::Styles {
+    clap::builder::Styles::styled()
+        .usage(
+            anstyle::Style::new()
+                .bold()
+                .underline()
+                .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Yellow))),
+        )
+        .header(
+            anstyle::Style::new()
+                .bold()
+                .underline()
+                .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Yellow))),
+        )
+        .literal(
+            anstyle::Style::new().fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Green))),
+        )
+        .invalid(
+            anstyle::Style::new()
+                .bold()
+                .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Red))),
+        )
+        .error(
+            anstyle::Style::new()
+                .bold()
+                .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Red))),
+        )
+        .valid(
+            anstyle::Style::new()
+                .bold()
+                .underline()
+                .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Green))),
+        )
+        .placeholder(
+            anstyle::Style::new().fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::White))),
+        )
+}
+
 fn main() {
     // Parse dos argumentos via linha de comando
+
     let config = Config::parse();
     // versao do programa
     let version = env!("CARGO_PKG_VERSION");
