@@ -7,16 +7,19 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 
 ## [proxima_versao] - Em andamento
 
-### Adicionado
-- Melhoria das mensagens de telemetria no log-file.
+[proxima_versao]: https://github.com/fvilante/video_frame_saver/compare/v1.6.1...head
 
-[proxima_versao]: https://github.com/fvilante/video_frame_saver/compare/v1.6.0...head
+
+## [1.6.1] - 2025-02-25
+
+### Adicionado
+- Melhoria e incremento das mensagens de telemetria no log-file.
 
 ## [1.6.0] - 2025-02-24
 
 ### Adicionado
-- Opção de salvar arquivo de log com dados levantados durante execução do programa. Util para depuracao de erros em campo.
-- Cores nas mensagens impressas ao usuario. [#5](https://github.com/fvilante/video_frame_saver/issues/5)
+- Opção de salvar arquivo de log com dados levantados durante execução do programa. Util para depuracao de erros em campo. [#5](https://github.com/fvilante/video_frame_saver/issues/5)
+- Colorização das mensagens impressas na tela. 
 
 [1.6.0]: https://github.com/fvilante/video_frame_saver/compare/v1.5.0...v1.6.0
 
