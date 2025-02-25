@@ -1,6 +1,6 @@
 [package]
 name = "video_frame_saver"
-version = "1.6.0"
+version = "1.6.1.alpha.1"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
