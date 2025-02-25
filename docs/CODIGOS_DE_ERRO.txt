@@ -10,6 +10,9 @@ Este documento explica os codigos de erro gerados pelo programa
 Os codigos de erro sao retornados ao sistema operacional quando 
 o programa encontra um problema critico.
 
+DICA: Se o erro estiver ocorrendo em campo, voce pode obter informacoes
+adicionais sobre o erro usando o parametro `--log-file`.
+
 ============================================================
   LISTA DE CODIGOS DE ERRO E SEUS SIGNIFICADOS
 ============================================================

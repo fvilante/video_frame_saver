@@ -21,6 +21,7 @@ Compatível com sistemas operacionais que suportam **Rust**, incluindo **Windows
 - Permite definir manualmente a resolução da câmera ao capturar a imagem.
 - Autodetecta as resoluções suportadas pela câmera.
 - Ajusta automaticamente para a resolução mais próxima disponível caso a especificada não seja suportada.
+- Salva arquivo de log com dados de telemetria do programa enquanto executado. Util para depurar erros. 
 
 ## Uso Básico
 
@@ -60,6 +61,8 @@ Usage: video_frame_saver.exe [OPTIONS]
 | `--verbose`               | Ativa o modo de depuração (exibe informações detalhadas).   |
 | `-h, --help`              | Exibe o menu de ajuda.                                      |
 | `-V, --version`           | Exibe a versão do programa.                                 |
+| `--log-file`              | Ativa criacao de arquivo de telemetria durante execucao do programa.                                 |
+| `-o, --log-file-name`     | Define nome do arquivo para salvar telemetria. Use junto com `--log-file`                                 |
 
 ## Exemplos de Uso
 
@@ -92,6 +95,14 @@ video_frame_saver.exe --width 1920 --height 1080
 ```sh
 video_frame_saver.exe -f minha_imagem.bmp
 ```
+
+### Salvar arquivo de log com dados de telemetria.
+
+```sh
+video_frame_saver.exe --log-file
+```
+
+
 
 ## Formatos de Imagem Suportados
 
