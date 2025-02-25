@@ -5,6 +5,7 @@ use clap::CommandFactory;
 use clap::Parser;
 use opencv::{core, highgui, imgcodecs, imgproc, prelude::*, videoio, Result};
 use prettytable::{color, Attr, Cell, Row, Table};
+use std::env;
 
 use fern::colors::{Color, ColoredLevelConfig};
 use log::{debug, error, info, trace, warn};
@@ -554,7 +555,6 @@ pub fn get_styles() -> clap::builder::Styles {
 
 fn main() {
     // Parse dos argumentos via linha de comando
-
     let config = Config::parse();
     // versao do programa
     let version = env!("CARGO_PKG_VERSION");
@@ -562,6 +562,10 @@ fn main() {
     // configura logging
     setup_logging(&config).expect("failed to initialize logging.");
     trace!("Programa iniciado - versao {}", version);
+    let full_command: Vec<String> = env::args_os()
+        .map(|s| s.to_string_lossy().into_owned())
+        .collect();
+    trace!("Linha de comando: {:?}", full_command);
 
     // executa aplicativo
     match run_app(&config) {
