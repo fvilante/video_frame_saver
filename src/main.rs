@@ -3,30 +3,15 @@ use opencv::{core, highgui, imgcodecs, imgproc, prelude::*, videoio, Result};
 use prettytable::{color, Attr, Cell, Row, Table};
 
 use fern::Dispatch;
-use log::{debug, info, trace, warn};
+use log::{debug, error, info, trace, warn};
 use std::{io, time::SystemTime};
 
-fn setup_logging(verbosity: u64) -> Result<(), fern::InitError> {
+fn setup_logging() -> Result<(), fern::InitError> {
     let mut base_config = fern::Dispatch::new();
-
-    base_config = match verbosity {
-        0 => {
-            // Let's say we depend on something which whose "info" level messages are too
-            // verbose to include in end-user output. If we don't need them,
-            // let's not include them.
-            base_config
-                .level(log::LevelFilter::Info)
-                .level_for("overly-verbose-target", log::LevelFilter::Warn)
-        }
-        1 => base_config
-            .level(log::LevelFilter::Debug)
-            .level_for("overly-verbose-target", log::LevelFilter::Info),
-        2 => base_config.level(log::LevelFilter::Debug),
-        _3_or_more => base_config.level(log::LevelFilter::Trace),
-    };
 
     // Separate file config so we can include year, month and day in file logs
     let file_config = fern::Dispatch::new()
+        .level(log::LevelFilter::Trace)
         .format(|out, message, record| {
             out.finish(format_args!(
                 "[{} {} {}] {}",
@@ -39,6 +24,7 @@ fn setup_logging(verbosity: u64) -> Result<(), fern::InitError> {
         .chain(fern::log_file("program.log")?);
 
     let stdout_config = fern::Dispatch::new()
+        .level(log::LevelFilter::Info)
         .format(|out, message, record| {
             // special format for debug messages coming from our own crate.
             if record.level() > log::LevelFilter::Info && record.target() == "cmd_program" {
@@ -128,6 +114,10 @@ struct Config {
     /// Detecta e lista as opcoes de resolucao da camera.
     #[arg(long)]
     detect_resolutions: bool,
+
+    /// Ativa gravação de eventos do programa em um arquivo de log. Se o arquivo já existir, os dados serão adicionados ao final.
+    #[arg(short = 'o', long, default_value = "video_frame_saver.log")]
+    log_file: String,
 }
 
 #[derive(Debug)]
@@ -260,7 +250,7 @@ struct CameraSize {
 fn camera_set_size(camera: &mut videoio::VideoCapture, config: &Config) -> Result<(), AppError> {
     if let (Some(w), Some(h)) = (config.width, config.height) {
         if config.verbose {
-            println!("Definindo resolução da câmera para {}x{}", w, h);
+            info!("Definindo resolução da câmera para {}x{}", w, h);
         }
 
         for (prop, val, desc) in [
@@ -275,7 +265,7 @@ fn camera_set_size(camera: &mut videoio::VideoCapture, config: &Config) -> Resul
             })?;
         }
     } else if config.verbose {
-        println!("Usando resolução padrão da câmera.");
+        warn!("Necessario preencher os parametros `--width` e `--height` em conjunto. Como alternativa selecionando resolução padrão da câmera.");
     }
     Ok(())
 }
@@ -364,15 +354,15 @@ fn display_camera_feed(
 fn process_key_input(key: i32, frame: &Mat, image_name: &str) -> Result<bool, AppError> {
     if key > 0 && key != 255 {
         if key == 27 {
-            println!("Pressionado tecla ESC, nenhuma imagem será salva.");
+            info!("Pressionado tecla ESC, nenhuma imagem será salva.");
             return Ok(true);
         }
 
-        println!("Iniciando rotina de gravação...");
+        info!("Iniciando rotina de gravação...");
         let params = core::Vector::new();
         match imgcodecs::imwrite(image_name, frame, &params) {
             Ok(_) => {
-                println!("Gravação bem-sucedida! Arquivo salvo como: {}", image_name);
+                info!("Gravação bem-sucedida! Arquivo salvo como: {}", image_name);
                 return Ok(true);
             }
             Err(e) => {
@@ -457,17 +447,7 @@ fn listar_resolucoes_suportadas(
     Ok(resolucoes_suportadas)
 }
 
-fn run_app() -> Result<(), AppError> {
-    let verbosity: u64 = 0; //cmd_arguments.occurrences_of("verbose");
-    setup_logging(verbosity).expect("failed to initialize logging.");
-
-    info!("Hello, world!");
-    warn!("Warning!");
-    debug!("Now exiting.");
-
-    // Parse dos argumentos via linha de comando
-    let config = Config::parse();
-
+fn run_app(config: &Config) -> Result<(), AppError> {
     // Verifica se o modo de listagem foi solicitado
     if config.list {
         let range = config.range_start..config.range_end;
@@ -477,13 +457,13 @@ fn run_app() -> Result<(), AppError> {
 
     // Inicializa a câmera
     let mut camera = initialize_camera(config.camera_index)?;
-    println!("Câmera inicializada com sucesso!");
+    info!("Câmera inicializada com sucesso!");
 
     if config.detect_resolutions {
         let resolucoes = listar_resolucoes_suportadas(&mut camera)?;
-        println!("Resoluções suportadas pela câmera:");
+        info!("Resoluções suportadas pela câmera:");
         for (w, h) in resolucoes {
-            println!("{}x{}", w, h);
+            info!("{}x{}", w, h);
         }
         return Ok(());
     } else {
@@ -492,7 +472,7 @@ fn run_app() -> Result<(), AppError> {
 
         // Obtém e exibe as dimensões da câmera
         let camera_size = camera_get_size(&camera)?;
-        println!(
+        info!(
             "Dimensões atuais da câmera: Largura = {}, Altura = {}",
             camera_size.width, camera_size.height
         );
@@ -505,10 +485,24 @@ fn run_app() -> Result<(), AppError> {
 }
 
 fn main() {
-    match run_app() {
-        Ok(_) => std::process::exit(0), // Sucesso retorna 0
+    // Parse dos argumentos via linha de comando
+    let config = Config::parse();
+    // versao do programa
+    let version = env!("CARGO_PKG_VERSION");
+
+    // configura logging
+    setup_logging().expect("failed to initialize logging.");
+    trace!("Programa iniciado - versao {}", version);
+
+    // executa aplicativo
+    match run_app(&config) {
+        Ok(_) => {
+            trace!("Programa finalizado com sucesso");
+            std::process::exit(0);
+        } // Sucesso retorna 0
         Err(e) => {
-            eprintln!("Erro: {}", e);
+            error!("Erro: {}", e);
+            trace!("Programa finalizado com erro");
             std::process::exit(e.exit_code()); // Retorna o codigo de erro especifico
         }
     }

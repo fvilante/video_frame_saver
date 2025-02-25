@@ -8,7 +8,8 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 ## [proxima_versao] - Em andamento
 
 ### Adicionado
-- TODO: Coordena melhor mensagens de log [#5]
+- Adiciona possibilidade de gravar mensagens de log (telemetria durante execução do programa) em um arquivo de texto. Util para depuracao de erros em campo. [#5]
+
 
 [proxima_versao]: https://github.com/fvilante/video_frame_saver/compare/v1.5.0...head
 [#5]: https://github.com/fvilante/video_frame_saver/issues/5
