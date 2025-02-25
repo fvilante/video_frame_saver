@@ -7,6 +7,9 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 
 ## [proxima_versao] - Em andamento
 
+### Adicionado
+- Melhoria das mensagens de telemetria no log-file.
+
 [proxima_versao]: https://github.com/fvilante/video_frame_saver/compare/v1.6.0...head
 
 ## [1.6.0] - 2025-02-24

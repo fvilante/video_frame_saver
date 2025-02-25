@@ -208,7 +208,7 @@ fn initialize_camera(camera_index: i32) -> Result<videoio::VideoCapture, AppErro
         .map_err(|e| AppError::CameraOpenError(e.to_string()))?
     {
         return Err(AppError::CameraOpenError(format!(
-            "Não foi possível abrir a câmera com o índice: {}",
+            "Nao foi possivel abrir a camera com o indice: {}",
             camera_index
         )));
     }
@@ -226,6 +226,7 @@ fn lista_cameras_acessiveis(range: impl Iterator<Item = i32>) -> Vec<i32> {
     range
         .filter_map(|index| {
             if let Ok(camera) = initialize_camera(index) {
+                trace!("Camera {} acessivel", index);
                 let _ = release_camera(camera);
                 Some(index)
             } else {
@@ -281,7 +282,7 @@ struct CameraSize {
 fn camera_set_size(camera: &mut videoio::VideoCapture, config: &Config) -> Result<(), AppError> {
     if let (Some(w), Some(h)) = (config.width, config.height) {
         if config.verbose {
-            info!("Definindo resolução da câmera para {}x{}", w, h);
+            info!("Definindo resolução da camera para {}x{}", w, h);
         }
 
         for (prop, val, desc) in [
@@ -290,7 +291,7 @@ fn camera_set_size(camera: &mut videoio::VideoCapture, config: &Config) -> Resul
         ] {
             camera.set(prop, val).map_err(|e| {
                 AppError::CameraSizeError(format!(
-                    "Erro ao definir {} da câmera para {} pixels: {}",
+                    "Erro ao definir {} da camera para {} pixels: {}",
                     desc, val, e
                 ))
             })?;
@@ -310,7 +311,7 @@ fn camera_get_size(camera: &videoio::VideoCapture) -> Result<CameraSize, AppErro
         .map_err(|e| AppError::CameraSizeError(format!("Erro ao obter altura: {}", e)))?;
     if width <= 0.0 || height <= 0.0 {
         return Err(AppError::CameraSizeError(format!(
-            "Dimensões inválidas: largura e altura devem ser maiores que zero"
+            "Dimensoes invalidas: largura e altura devem ser maiores que zero"
         )));
     }
     Ok(CameraSize { width, height })
@@ -385,15 +386,15 @@ fn display_camera_feed(
 fn process_key_input(key: i32, frame: &Mat, image_name: &str) -> Result<bool, AppError> {
     if key > 0 && key != 255 {
         if key == 27 {
-            info!("Pressionado tecla ESC, nenhuma imagem será salva.");
+            info!("Pressionado tecla ESC, nenhuma imagem sera salva.");
             return Ok(true);
         }
 
-        info!("Iniciando rotina de gravação...");
+        info!("Iniciando rotina de gravacao...");
         let params = core::Vector::new();
         match imgcodecs::imwrite(image_name, frame, &params) {
             Ok(_) => {
-                info!("Gravação bem-sucedida! Arquivo salvo como: {}", image_name);
+                info!("Gravacao bem-sucedida! Arquivo salvo como: {}", image_name);
                 return Ok(true);
             }
             Err(e) => {
@@ -488,11 +489,11 @@ fn run_app(config: &Config) -> Result<(), AppError> {
 
     // Inicializa a câmera
     let mut camera = initialize_camera(config.camera_index)?;
-    info!("Câmera inicializada com sucesso!");
+    info!("Camera inicializada com sucesso!");
 
     if config.detect_resolutions {
         let resolucoes = listar_resolucoes_suportadas(&mut camera)?;
-        info!("Resoluções suportadas pela câmera:");
+        info!("Resolucoes suportadas pela camera:");
         for (w, h) in resolucoes {
             info!("{}x{}", w, h);
         }
@@ -504,7 +505,7 @@ fn run_app(config: &Config) -> Result<(), AppError> {
         // Obtém e exibe as dimensões da câmera
         let camera_size = camera_get_size(&camera)?;
         info!(
-            "Dimensões atuais da câmera: Largura = {}, Altura = {}",
+            "Dimensoes atuais da camera: Largura = {}, Altura = {}",
             camera_size.width, camera_size.height
         );
 
@@ -560,12 +561,12 @@ fn main() {
     let version = env!("CARGO_PKG_VERSION");
 
     // configura logging
-    setup_logging(&config).expect("failed to initialize logging.");
+    setup_logging(&config).expect("Falha ao iniciar logging.");
     trace!("Programa iniciado - versao {}", version);
     let full_command: Vec<String> = env::args_os()
         .map(|s| s.to_string_lossy().into_owned())
         .collect();
-    trace!("Linha de comando: {:?}", full_command);
+    trace!("Parametros: {}", full_command.join(" "));
 
     // executa aplicativo
     match run_app(&config) {
@@ -576,6 +577,10 @@ fn main() {
         Err(e) => {
             error!("Erro: {}", e);
             trace!("Programa finalizado com erro");
+            trace!(
+                "Codigo de erro retornado ao sistema operacional: {}",
+                e.exit_code()
+            );
             std::process::exit(e.exit_code()); // Retorna o codigo de erro especifico
         }
     }
