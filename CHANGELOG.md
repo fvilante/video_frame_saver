@@ -13,7 +13,8 @@ e este projeto segue o padrão de gerenciamento de versão [Semantic Versioning]
 ## [1.6.1] - 2025-02-25
 
 ### Adicionado
-- Melhoria e incremento das mensagens de telemetria no log-file.
+
+- Melhoria das [mensagens de telemetria](https://raw.githubusercontent.com/fvilante/video_frame_saver/refs/tags/v1.6.1/docs/exemplo_de_log_file.txt) no log-file. [#5](https://github.com/fvilante/video_frame_saver/issues/5)
 
 ## [1.6.0] - 2025-02-24
 
