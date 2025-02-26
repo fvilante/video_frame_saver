@@ -561,6 +561,8 @@ pub fn get_styles() -> clap::builder::Styles {
         )
 }
 
+enum { EXIT_SUCESS = 0 };
+
 fn main() {
     // Parse dos argumentos via linha de comando
     let config = Config::parse();
@@ -579,7 +581,7 @@ fn main() {
     match run_app(&config) {
         Ok(_) => {
             trace!("Programa finalizado com sucesso");
-            std::process::exit(0);
+            std::process::exit(EXIT_SUCCESS);
         } // Sucesso retorna 0
         Err(e) => {
             error!("Erro: {}", e);
